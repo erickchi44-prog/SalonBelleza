@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 import { supabase } from '../lib/supabase'
 import DefaultLayout from '../layouts/DefaultLayout.vue'
 import AdminLayout from '../layouts/AdminLayout.vue'
 
-const routes = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: DefaultLayout,
@@ -39,12 +40,12 @@ const router = createRouter({
   scrollBehavior: () => ({ top: 0 })
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const { data: { user } } = await supabase.auth.getUser()
 
   const publicRoutes = ['login', 'register', 'services', 'feedback']
 
-  if (!user && !publicRoutes.includes(to.name)) {
+  if (!user && !publicRoutes.includes(to.name as string)) {
     return next({ name: 'login' })
   }
 
@@ -61,7 +62,7 @@ router.beforeEach(async (to, from, next) => {
     return next({ name: 'services' })
   }
 
-  if (to.name?.startsWith('admin-')) {
+  if ((to.name as string)?.startsWith('admin-') && user) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')

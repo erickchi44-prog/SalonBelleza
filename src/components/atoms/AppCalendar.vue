@@ -3,7 +3,6 @@
     <p-datepicker
       :id="id"
       :value="modelValue"
-      @update:value="$emit('update:modelValue', $event)"
       @date-select="$emit('update:modelValue', $event)"
       :placeholder="placeholder"
       :disabled="disabled"
@@ -12,14 +11,13 @@
       :minDate="minDate"
       iconDisplay="input"
       fluid
-      class="w-full bg-transparent border-0 border-b-2 border-outline-variant py-sm focus:ring-0 focus:border-primary transition-all duration-300 placeholder-transparent"
+      :class="[{ 'border-error': error }]"
       v-bind="$attrs"
     />
     <label
       v-if="label && !inline"
       :for="id"
       class="absolute left-0 top-sm text-on-surface-variant font-label-md text-label-md transition-all duration-300 pointer-events-none"
-      :class="labelClasses"
     >
       {{ label }}
     </label>
@@ -27,49 +25,39 @@
   </div>
 </template>
 
-<script setup>
-import { computed } from 'vue';
+<script setup lang="ts">
 import PDatepicker from 'primevue/datepicker';
 
-const props = defineProps({
-  modelValue: [Date, String, Array],
-  id: {
-    type: String,
-    required: true
-  },
-  label: String,
-  placeholder: {
-    type: String,
-    default: ' '
-  },
-  disabled: Boolean,
-  inline: Boolean,
-  minDate: Date,
-  error: String
-});
+interface Props {
+  modelValue?: Date | string | string[] | null
+  id: string
+  label?: string
+  placeholder?: string
+  disabled?: boolean
+  inline?: boolean
+  minDate?: Date
+  error?: string
+}
 
-defineEmits(['update:modelValue']);
+withDefaults(defineProps<Props>(), { placeholder: ' ', inline: false });
 
-const labelClasses = computed(() => {
-  const isFilled = props.modelValue !== undefined && props.modelValue !== null && props.modelValue !== '';
-  return {
-    '-translate-y-5 scale-90 text-primary': isFilled,
-    'peer-focus:-translate-y-5 peer-focus:scale-90 peer-focus:text-primary': !isFilled
-  };
-});
+defineEmits<{ (e: 'update:modelValue', value: any): void }>();
 </script>
 
 <style>
-/* Style PrimeVue DatePicker to match custom flat styles */
+.p-datepicker:has(input) {
+  display: flex;
+  align-items: center;
+}
 .p-datepicker input {
   width: 100%;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
-.p-datepicker {
-  display: flex !important;
-  align-items: center;
+.p-datepicker[data-p-filled="true"] + label,
+.p-datepicker:focus-within + label {
+  transform: translateY(-1.25rem) scale(0.9);
+  color: var(--color-primary);
 }
 </style>

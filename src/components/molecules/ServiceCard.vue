@@ -2,7 +2,7 @@
   <div class="bg-surface border border-outline-variant/30 flex flex-col justify-between p-md hover:border-primary transition-all duration-300 shadow-sm hover:shadow-md h-full">
     <div class="space-y-sm">
       <div v-if="imageUrl" class="relative w-full h-48 overflow-hidden mb-sm">
-        <img :src="imageUrl" :alt="title" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+        <img :src="imageUrl" :alt="title" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />
       </div>
       <div class="flex justify-between items-start">
         <h3 class="font-headline-md text-headline-md text-on-surface line-clamp-1">{{ title }}</h3>
@@ -26,17 +26,21 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import AppButton from '../atoms/AppButton.vue';
 
-defineProps({
-  id: [String, Number],
-  title: String,
-  description: String,
-  price: [String, Number],
-  duration: [String, Number],
-  imageUrl: String
-});
+interface Props {
+  id?: string | number
+  title?: string
+  description?: string
+  price?: string | number
+  duration?: string | number
+  imageUrl?: string
+}
 
-defineEmits(['select']);
+defineProps<Props>();
+
+defineEmits<{
+  (e: 'select', payload: { id?: string | number; title?: string; price?: string | number; duration?: string | number }): void
+}>();
 </script>

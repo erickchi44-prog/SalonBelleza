@@ -2,7 +2,7 @@
   <div class="flex items-center gap-xs">
     <p-rating
       :value="modelValue"
-      @change="$emit('update:modelValue', $event.value)"
+      @change="$emit('update:modelValue', ($event as any).value)"
       :readonly="readonly"
       :stars="stars"
       :cancel="false"
@@ -12,29 +12,28 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import PRating from 'primevue/rating';
 
-defineProps({
-  modelValue: {
-    type: Number,
-    default: 0
-  },
-  stars: {
-    type: Number,
-    default: 5
-  },
-  readonly: {
-    type: Boolean,
-    default: false
-  }
+interface Props {
+  modelValue?: number
+  stars?: number
+  readonly?: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+  modelValue: 0,
+  stars: 5,
+  readonly: false,
 });
 
-defineEmits(['update:modelValue']);
+defineEmits<{
+  (e: 'update:modelValue', value: number): void
+}>();
 </script>
 
 <style>
 .p-rating-icon {
-  color: var(--color-primary, #79542e) !important;
+  color: var(--color-primary, #79542e);
 }
 </style>

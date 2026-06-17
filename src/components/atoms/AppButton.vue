@@ -4,37 +4,36 @@
     :icon="icon"
     :loading="loading"
     :disabled="disabled"
-    :severity="severity"
-    :variant="variant"
-    class="font-label-md rounded-none uppercase tracking-widest transition-all duration-300 shadow-md hover:shadow-lg"
-    :class="customClasses"
+    class="font-label-md rounded-none uppercase tracking-widest transition-all duration-300 px-md py-sm"
+    :class="btnClasses"
     v-bind="$attrs"
   >
     <slot></slot>
   </p-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
 import PButton from 'primevue/button';
 
-const props = defineProps({
-  label: String,
-  icon: String,
-  loading: Boolean,
-  disabled: Boolean,
-  severity: String, // 'primary', 'secondary', 'success', 'info', 'warning', 'danger'
-  variant: String, // 'outlined', 'text', 'link'
-  primaryBrand: {
-    type: Boolean,
-    default: true
-  }
-});
+interface Props {
+  label?: string
+  icon?: string
+  loading?: boolean
+  disabled?: boolean
+  severity?: string
+  variant?: string
+}
 
-const customClasses = computed(() => {
-  if (props.primaryBrand && !props.severity && !props.variant) {
-    return 'bg-primary border-primary text-on-primary hover:bg-surface-tint hover:border-surface-tint';
+const props = withDefaults(defineProps<Props>(), {});
+
+const btnClasses = computed(() => {
+  if (props.variant === 'outlined') {
+    return 'border-primary text-primary hover:bg-primary/10 bg-transparent shadow-none hover:shadow-none'
   }
-  return '';
-});
+  if (props.variant === 'text') {
+    return 'bg-transparent border-transparent text-primary hover:bg-primary/10 shadow-none hover:shadow-none'
+  }
+  return 'bg-primary border-primary text-on-primary hover:bg-surface-tint hover:border-surface-tint shadow-md hover:shadow-lg'
+})
 </script>

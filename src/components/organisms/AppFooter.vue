@@ -4,7 +4,7 @@
       <div class="mb-md md:mb-0 text-center md:text-left">
         <h3 class="font-headline-md text-headline-md text-primary">Aura Luxe Salon</h3>
         <p class="font-body-md text-body-md text-on-surface-variant max-w-xs mt-xs text-sm">
-          © 2026 Aura Luxe Salon. Un oasis de belleza, bienestar y tranquilidad.
+          &copy; 2026 Aura Luxe Salon. Un oasis de belleza, bienestar y tranquilidad.
         </p>
       </div>
       <div class="flex flex-wrap justify-center gap-md">
@@ -18,7 +18,7 @@
           Valoraciones
         </router-link>
         <a href="#" class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm">
-          Políticas de Privacidad
+          Pol&iacute;ticas de Privacidad
         </a>
       </div>
     </div>

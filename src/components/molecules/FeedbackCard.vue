@@ -17,15 +17,17 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import AppRating from '../atoms/AppRating.vue';
 
-defineProps({
-  id: [String, Number],
-  customerName: String,
-  date: String,
-  rating: Number,
-  comment: String,
-  serviceName: String
-});
+interface Props {
+  id?: string | number
+  customerName?: string
+  date?: string
+  rating?: number
+  comment?: string
+  serviceName?: string
+}
+
+defineProps<Props>();
 </script>

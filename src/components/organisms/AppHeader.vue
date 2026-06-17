@@ -4,7 +4,7 @@
       <router-link to="/" class="font-headline-md text-headline-md text-primary tracking-tight">
         Aura Luxe Salon
       </router-link>
-      
+
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex gap-md items-center">
         <router-link to="/services" class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md">
@@ -25,12 +25,12 @@
             <i class="pi pi-cog"></i> Panel Admin
           </router-link>
           <button @click="handleLogout" class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md flex items-center gap-xs cursor-pointer">
-            <i class="pi pi-sign-out"></i> Cerrar Sesión
+            <i class="pi pi-sign-out"></i> Cerrar Sesi&oacute;n
           </button>
         </template>
         <template v-else>
           <router-link to="/login" class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md flex items-center gap-xs">
-            <i class="pi pi-sign-in"></i> Iniciar Sesión
+            <i class="pi pi-sign-in"></i> Iniciar Sesi&oacute;n
           </router-link>
           <router-link to="/admin/dashboard" class="bg-primary-container/10 text-primary border border-primary/20 px-sm py-xs hover:bg-primary-container/20 transition-all font-label-sm text-xs flex items-center gap-xs">
             <i class="pi pi-cog"></i> Panel Admin
@@ -38,8 +38,8 @@
         </template>
       </nav>
 
-      <!-- Mobile Navigation Trigger -->
-      <button class="md:hidden text-primary focus:outline-none" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle Menu">
+      <!-- Mobile Navigation Trigger (hidden on desktop, visible on mobile) -->
+      <button class="md:hidden text-primary focus-visible:outline-2 focus-visible:outline-primary p-xs" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Abrir men&uacute;">
         <i :class="mobileMenuOpen ? 'pi pi-times' : 'pi pi-bars'" class="text-xl"></i>
       </button>
     </div>
@@ -56,7 +56,7 @@
         <router-link to="/feedback" class="block text-on-surface-variant hover:text-primary py-xs font-label-md" @click="mobileMenuOpen = false">
           Valoraciones
         </router-link>
-          <hr class="border-outline-variant/20" />
+        <hr class="border-outline-variant/20" />
         <template v-if="user">
           <router-link to="/booking" class="block text-on-surface-variant hover:text-primary py-xs font-label-md flex items-center gap-xs" @click="mobileMenuOpen = false">
             <i class="pi pi-user"></i> Mi Cuenta
@@ -64,16 +64,13 @@
           <router-link to="/admin/dashboard" class="block text-primary py-xs font-label-md flex items-center gap-xs" @click="mobileMenuOpen = false">
             <i class="pi pi-cog"></i> Panel Admin
           </router-link>
-          <button @click="handleLogout" class="block text-on-surface-variant hover:text-primary py-xs font-label-md flex items-center gap-xs w-full text-left cursor-pointer">
-            <i class="pi pi-sign-out"></i> Cerrar Sesión
+          <button @click="handleLogoutMobile" class="block text-on-surface-variant hover:text-primary py-xs font-label-md flex items-center gap-xs w-full text-left cursor-pointer">
+            <i class="pi pi-sign-out"></i> Cerrar Sesi&oacute;n
           </button>
         </template>
         <template v-else>
           <router-link to="/login" class="block text-on-surface-variant hover:text-primary py-xs font-label-md flex items-center gap-xs" @click="mobileMenuOpen = false">
-            <i class="pi pi-sign-in"></i> Iniciar Sesión
-          </router-link>
-          <router-link to="/admin/dashboard" class="block text-primary py-xs font-label-md flex items-center gap-xs" @click="mobileMenuOpen = false">
-            <i class="pi pi-cog"></i> Panel Admin
+            <i class="pi pi-sign-in"></i> Iniciar Sesi&oacute;n
           </router-link>
         </template>
       </div>
@@ -81,25 +78,24 @@
   </header>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { supabase } from '../../lib/supabase';
+<script setup lang="ts">
+import { shallowRef } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '../../stores/auth';
 
-const router = useRouter();
-const mobileMenuOpen = ref(false);
-const user = ref(null);
-
-onMounted(async () => {
-  const { data: { user: u } } = await supabase.auth.getUser();
-  user.value = u;
-});
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore);
+const { logout } = authStore;
+const mobileMenuOpen = shallowRef(false);
 
 const handleLogout = async () => {
-  await supabase.auth.signOut();
-  user.value = null;
   mobileMenuOpen.value = false;
-  router.push('/login');
+  await logout();
+};
+
+const handleLogoutMobile = async () => {
+  mobileMenuOpen.value = false;
+  await logout();
 };
 </script>
 
