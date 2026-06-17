@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen flex flex-col bg-background">
     <app-header />
-    <main class="flex-1 flex flex-col pt-20 pb-20 md:pb-0">
-      <router-view class="flex-1 flex flex-col" />
+    <main class="flex-grow pt-20 pb-20 md:pb-0">
+      <router-view />
     </main>
     <app-footer />
 
