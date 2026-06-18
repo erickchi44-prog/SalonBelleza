@@ -39,7 +39,11 @@
           </div>
           <p-datatable :value="recentBookings" class="text-sm" :rows="5" stripedRows>
             <p-column field="customer" header="Cliente" />
-            <p-column field="service" header="Servicio" />
+            <p-column header="Servicios">
+              <template #body="{ data }">
+                {{ data.services.join(', ') }}
+              </template>
+            </p-column>
             <p-column field="specialist" header="Especialista" />
             <p-column field="time" header="Hora" />
             <p-column header="Estado">
@@ -89,7 +93,7 @@
             class="border-l-4 border-primary pl-md py-sm bg-primary-container/5"
           >
             <p class="font-label-md text-sm font-semibold text-on-surface">{{ appt.customer }}</p>
-            <p class="text-xs text-on-surface-variant">{{ appt.service }}</p>
+            <p class="text-xs text-on-surface-variant">{{ appt.services.join(', ') }}</p>
             <div class="flex items-center gap-xs mt-xs text-xs text-primary">
               <i class="pi pi-clock text-label-sm"></i>
               <span>{{ appt.time }} &middot; {{ appt.specialist }}</span>
@@ -137,8 +141,8 @@ onMounted(async () => {
     supabase.from('appointments').select('*', { count: 'exact', head: true }).eq('appointment_date', today),
     supabase.from('appointments').select('*', { count: 'exact', head: true }).gte('appointment_date', startOfMonth),
     supabase.from('feedback').select('rating'),
-    supabase.from('appointments').select('customer_name, appointment_time, status, services(title), specialists(name)').order('created_at', { ascending: false }).limit(5),
-    supabase.from('appointments').select('id, customer_name, appointment_time, services(title), specialists(name)').eq('appointment_date', today).order('appointment_time')
+    supabase.from('appointments').select('customer_name, appointment_time, status, appointment_services(services(title)), specialists(name)').order('created_at', { ascending: false }).limit(5),
+    supabase.from('appointments').select('id, customer_name, appointment_time, appointment_services(services(title)), specialists(name)').eq('appointment_date', today).order('appointment_time')
   ]);
 
   const avgRating = feedbackData?.length
@@ -154,7 +158,7 @@ onMounted(async () => {
 
   recentBookings.value = (bookings || []).map((b: any) => ({
     customer: b.customer_name,
-    service: b.services?.title || '-',
+    services: b.appointment_services?.map((as: any) => as.services?.title || '-') || [],
     specialist: b.specialists?.name || '-',
     time: b.appointment_time?.slice(0, 5) || '-',
     status: b.status
@@ -163,7 +167,7 @@ onMounted(async () => {
   todayAppointments.value = (todayData || []).map((a: any) => ({
     id: a.id,
     customer: a.customer_name,
-    service: a.services?.title || '-',
+    services: a.appointment_services?.map((as: any) => as.services?.title || '-') || [],
     time: a.appointment_time?.slice(0, 5) || '-',
     specialist: a.specialists?.name || '-'
   }));

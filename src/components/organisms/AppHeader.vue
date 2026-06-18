@@ -1,76 +1,75 @@
 <template>
-  <header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-md border-b border-outline-variant/10 shadow-sm">
-    <div class="flex justify-between items-center h-20 px-margin-mobile md:px-margin-desktop max-w-[1200px] mx-auto">
-      <router-link to="/" class="font-headline-md text-headline-md text-primary tracking-tight">
-        Aura Luxe Salon
+  <header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant/15">
+    <div class="flex justify-between items-center h-16 px-margin-mobile md:px-margin-desktop max-w-[1200px] mx-auto">
+      <router-link to="/" class="flex items-center gap-2 font-headline-md text-headline-md text-primary tracking-tight no-underline">
+        <span class="w-7 h-7 bg-primary flex items-center justify-center">
+          <i class="pi pi-sparkles text-on-primary text-sm"></i>
+        </span>
+        Aura Luxe
       </router-link>
 
       <!-- Desktop Navigation -->
-      <nav class="hidden md:flex gap-md items-center">
-        <router-link to="/services" class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md">
+      <nav class="hidden md:flex items-center gap-0.5">
+        <router-link to="/services" class="text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md text-label-md px-3 py-2 rounded">
           Servicios
         </router-link>
-        <router-link to="/booking" class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md">
-          Reservar Cita
+        <router-link to="/booking" class="text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md text-label-md px-3 py-2 rounded">
+          Reservar
         </router-link>
-        <router-link to="/feedback" class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md">
+        <router-link to="/feedback" class="text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md text-label-md px-3 py-2 rounded">
           Valoraciones
         </router-link>
-        <div class="h-4 w-px bg-outline-variant/30"></div>
         <template v-if="user">
-          <router-link to="/booking" class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md flex items-center gap-xs">
-            <i class="pi pi-user"></i> Mi Cuenta
+          <router-link to="/my-appointments" class="text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md text-label-md px-3 py-2 rounded">
+            Mis Citas
           </router-link>
-          <router-link to="/admin/dashboard" class="bg-primary-container/10 text-primary border border-primary/20 px-sm py-xs hover:bg-primary-container/20 transition-all font-label-sm text-xs flex items-center gap-xs">
-            <i class="pi pi-cog"></i> Panel Admin
+          <router-link to="/admin/dashboard" class="text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md text-label-md px-3 py-2 rounded">
+            <i class="pi pi-cog"></i>
           </router-link>
-          <button @click="handleLogout" class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md flex items-center gap-xs cursor-pointer">
-            <i class="pi pi-sign-out"></i> Cerrar Sesi&oacute;n
+          <button @click="handleLogout" class="text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md text-label-md p-2 rounded cursor-pointer">
+            <i class="pi pi-sign-out"></i>
           </button>
         </template>
         <template v-else>
-          <router-link to="/login" class="text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md flex items-center gap-xs">
-            <i class="pi pi-sign-in"></i> Iniciar Sesi&oacute;n
-          </router-link>
-          <router-link to="/admin/dashboard" class="bg-primary-container/10 text-primary border border-primary/20 px-sm py-xs hover:bg-primary-container/20 transition-all font-label-sm text-xs flex items-center gap-xs">
-            <i class="pi pi-cog"></i> Panel Admin
+          <router-link to="/login" class="text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md text-label-md px-3 py-2 rounded flex items-center gap-1.5">
+            <i class="pi pi-sign-in"></i> Ingresar
           </router-link>
         </template>
       </nav>
 
-      <!-- Mobile Navigation Trigger (hidden on desktop, visible on mobile) -->
-      <button class="md:hidden text-primary focus-visible:outline-2 focus-visible:outline-primary p-xs" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Abrir men&uacute;">
+      <!-- Mobile toggle -->
+      <button class="md:hidden text-on-surface-variant hover:text-primary p-2 cursor-pointer" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Abrir men&uacute;">
         <i :class="mobileMenuOpen ? 'pi pi-times' : 'pi pi-bars'" class="text-xl"></i>
       </button>
     </div>
 
-    <!-- Mobile Navigation Menu -->
+    <!-- Mobile Menu -->
     <transition name="slide-fade">
-      <div v-if="mobileMenuOpen" class="md:hidden bg-surface border-b border-outline-variant/20 py-md px-margin-mobile absolute w-full left-0 shadow-lg space-y-md">
-        <router-link to="/services" class="block text-on-surface-variant hover:text-primary py-xs font-label-md" @click="mobileMenuOpen = false">
+      <div v-if="mobileMenuOpen" class="md:hidden bg-surface border-b border-outline-variant/15 py-3 px-margin-mobile absolute w-full left-0 shadow-lg space-y-1">
+        <router-link to="/services" class="block text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md px-3 py-2 rounded" @click="mobileMenuOpen = false">
           Servicios
         </router-link>
-        <router-link to="/booking" class="block text-on-surface-variant hover:text-primary py-xs font-label-md" @click="mobileMenuOpen = false">
-          Reservar Cita
+        <router-link to="/booking" class="block text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md px-3 py-2 rounded" @click="mobileMenuOpen = false">
+          Reservar
         </router-link>
-        <router-link to="/feedback" class="block text-on-surface-variant hover:text-primary py-xs font-label-md" @click="mobileMenuOpen = false">
+        <router-link to="/feedback" class="block text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md px-3 py-2 rounded" @click="mobileMenuOpen = false">
           Valoraciones
         </router-link>
-        <hr class="border-outline-variant/20" />
+        <hr class="border-outline-variant/15 my-1" />
         <template v-if="user">
-          <router-link to="/booking" class="block text-on-surface-variant hover:text-primary py-xs font-label-md flex items-center gap-xs" @click="mobileMenuOpen = false">
-            <i class="pi pi-user"></i> Mi Cuenta
+          <router-link to="/my-appointments" class="block text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md px-3 py-2 rounded" @click="mobileMenuOpen = false">
+            <i class="pi pi-calendar mr-1.5"></i> Mis Citas
           </router-link>
-          <router-link to="/admin/dashboard" class="block text-primary py-xs font-label-md flex items-center gap-xs" @click="mobileMenuOpen = false">
-            <i class="pi pi-cog"></i> Panel Admin
+          <router-link to="/admin/dashboard" class="block text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md px-3 py-2 rounded" @click="mobileMenuOpen = false">
+            <i class="pi pi-cog mr-1.5"></i> Panel Admin
           </router-link>
-          <button @click="handleLogoutMobile" class="block text-on-surface-variant hover:text-primary py-xs font-label-md flex items-center gap-xs w-full text-left cursor-pointer">
-            <i class="pi pi-sign-out"></i> Cerrar Sesi&oacute;n
+          <button @click="handleLogoutMobile" class="block text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md px-3 py-2 rounded w-full text-left cursor-pointer">
+            <i class="pi pi-sign-out mr-1.5"></i> Cerrar Sesi&oacute;n
           </button>
         </template>
         <template v-else>
-          <router-link to="/login" class="block text-on-surface-variant hover:text-primary py-xs font-label-md flex items-center gap-xs" @click="mobileMenuOpen = false">
-            <i class="pi pi-sign-in"></i> Iniciar Sesi&oacute;n
+          <router-link to="/login" class="block text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md px-3 py-2 rounded" @click="mobileMenuOpen = false">
+            <i class="pi pi-sign-in mr-1.5"></i> Iniciar Sesi&oacute;n
           </router-link>
         </template>
       </div>

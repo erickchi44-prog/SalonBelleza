@@ -154,7 +154,6 @@ CREATE TABLE appointments (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id),
   customer_name TEXT NOT NULL,
-  service_id BIGINT REFERENCES services(id),
   specialist_id BIGINT REFERENCES specialists(id),
   appointment_date DATE NOT NULL,
   appointment_time TIME NOT NULL,
@@ -162,6 +161,15 @@ CREATE TABLE appointments (
   status TEXT DEFAULT 'Pendiente' CHECK (status IN ('Pendiente', 'Confirmada', 'Cancelada', 'Completada')),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Tabla pivote: appointment_services (relación muchos-a-muchos)
+CREATE TABLE appointment_services (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  appointment_id BIGINT NOT NULL REFERENCES appointments(id) ON DELETE CASCADE,
+  service_id BIGINT NOT NULL REFERENCES services(id),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(appointment_id, service_id)
 );
 
 -- Tabla: feedback (valoraciones)
@@ -239,6 +247,47 @@ INSERT INTO feedback (customer_name, service_id, rating, comment) VALUES
 
 ---
 
+### Migración: servicio único → multi-servicio
+
+Si ya tienes datos en `appointments` con `service_id`, ejecuta en el SQL Editor:
+
+```sql
+-- 1. Crear tabla pivote (si no existe)
+CREATE TABLE IF NOT EXISTS appointment_services (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  appointment_id BIGINT NOT NULL REFERENCES appointments(id) ON DELETE CASCADE,
+  service_id BIGINT NOT NULL REFERENCES services(id),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(appointment_id, service_id)
+);
+
+-- 2. Migrar datos existentes
+INSERT INTO appointment_services (appointment_id, service_id)
+SELECT id, service_id FROM appointments WHERE service_id IS NOT NULL
+ON CONFLICT DO NOTHING;
+
+-- 3. Eliminar columna antigua (una vez verificada)
+-- ALTER TABLE appointments DROP COLUMN service_id;
+
+-- 4. Políticas RLS para la nueva tabla (ejecutar después de 6. Seguridad)
+ALTER TABLE appointment_services ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Usuarios crean servicios de sus citas"
+  ON appointment_services FOR INSERT WITH CHECK (
+    EXISTS (SELECT 1 FROM appointments WHERE id = appointment_id AND user_id = auth.uid())
+  );
+CREATE POLICY "Usuarios ven servicios de sus citas"
+  ON appointment_services FOR SELECT USING (
+    EXISTS (SELECT 1 FROM appointments WHERE id = appointment_id AND user_id = auth.uid())
+  );
+CREATE POLICY "Admins gestionan appointment_services"
+  ON appointment_services FOR ALL USING (
+    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+  );
+```
+
+---
+
 ## 6. Seguridad (Row Level Security)
 
 Ejecutar después de insertar los datos:
@@ -252,6 +301,7 @@ ALTER TABLE schedules ENABLE ROW LEVEL SECURITY;
 ALTER TABLE appointments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE feedback ENABLE ROW LEVEL SECURITY;
 ALTER TABLE promotions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE appointment_services ENABLE ROW LEVEL SECURITY;
 
 -- Políticas para profiles
 CREATE POLICY "Usuarios ven su propio perfil"

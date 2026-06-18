@@ -14,7 +14,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'register', name: 'register', component: () => import('../views/RegisterView.vue') },
       { path: 'services', name: 'services', component: () => import('../views/ServicesView.vue') },
       { path: 'booking',  name: 'booking',  component: () => import('../views/BookingView.vue') },
-      { path: 'feedback', name: 'feedback', component: () => import('../views/FeedbackView.vue') }
+      { path: 'feedback', name: 'feedback', component: () => import('../views/FeedbackView.vue') },
+      { path: 'my-appointments', name: 'my-appointments', component: () => import('../views/MyAppointmentsView.vue') }
     ]
   },
   {

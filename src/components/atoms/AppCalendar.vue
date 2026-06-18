@@ -9,6 +9,7 @@
       :inline="inline"
       :showIcon="true"
       :minDate="minDate"
+      :disabledDates="disabledDates"
       iconDisplay="input"
       fluid
       :class="[{ 'border-error': error }]"
@@ -36,10 +37,11 @@ interface Props {
   disabled?: boolean
   inline?: boolean
   minDate?: Date
+  disabledDates?: Date[]
   error?: string
 }
 
-withDefaults(defineProps<Props>(), { placeholder: ' ', inline: false });
+withDefaults(defineProps<Props>(), { placeholder: ' ', inline: false, disabledDates: () => [] });
 
 defineEmits<{ (e: 'update:modelValue', value: any): void }>();
 </script>

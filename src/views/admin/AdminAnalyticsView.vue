@@ -145,12 +145,12 @@ onMounted(async () => {
   ];
 
   const { data: svcData } = await supabase
-    .from('appointments')
+    .from('appointment_services')
     .select('services(title)');
 
   const svcCount: Record<string, number> = {};
-  (svcData || []).forEach((a: any) => {
-    const name = a.services?.title || 'Otro';
+  (svcData || []).forEach((as: any) => {
+    const name = as.services?.title || 'Otro';
     svcCount[name] = (svcCount[name] || 0) + 1;
   });
 

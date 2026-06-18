@@ -28,11 +28,17 @@ export interface Specialist {
   imageUrl?: string
 }
 
+export interface AppointmentService {
+  id: number
+  appointment_id: number
+  service_id: number
+}
+
 export interface Appointment {
   id: number
   user_id: string
   customer_name: string
-  service_id: number
+  service_ids: number[]
   specialist_id: number
   appointment_date: string
   appointment_time: string
@@ -44,7 +50,7 @@ export interface Appointment {
 export interface AppointmentDisplay {
   id?: number
   customer: string
-  service: string
+  services: string[]
   specialist: string
   time: string
   status: string

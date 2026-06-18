@@ -50,17 +50,36 @@
                 class="bg-primary text-on-primary text-label-sm p-xs mb-xs cursor-pointer hover:bg-surface-tint transition-colors"
               >
                 <p class="font-semibold truncate">{{ appt.customer }}</p>
-                <p class="opacity-80 truncate">{{ appt.service }}</p>
+                <p class="opacity-80 truncate">{{ appt.services.join(', ') }}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <p-dialog v-model:visible="showDialog" header="Nueva Cita" modal :style="{ width: '480px' }" class="font-body-md">
+      <p-dialog v-model:visible="showDialog" header="Nueva Cita" modal :style="{ width: '520px' }" class="font-body-md">
         <div class="space-y-md p-md">
           <app-input id="newApptCustomer" v-model="newAppt.customer" label="Nombre del Cliente" />
-          <app-dropdown id="newApptService" v-model="newAppt.service" label="Servicio" :options="serviceOptions" optionLabel="label" optionValue="value" />
+          <div>
+            <label class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest block mb-sm">Servicios</label>
+            <div class="grid grid-cols-1 gap-sm max-h-40 overflow-y-auto">
+              <div
+                v-for="svc in serviceOptions" :key="svc.value"
+                class="flex items-center gap-sm p-sm border cursor-pointer transition-all text-sm"
+                :class="newAppt.service_ids.includes(svc.value)
+                  ? 'border-primary bg-primary-container/10'
+                  : 'border-outline-variant/30 hover:border-primary/50'"
+                @click="toggleAdminService(svc.value)"
+              >
+                <i
+                  class="pi text-xs"
+                  :class="newAppt.service_ids.includes(svc.value) ? 'pi-check-circle text-primary' : 'pi-circle text-outline-variant'"
+                ></i>
+                <span class="flex-1">{{ svc.label }}</span>
+                <span class="text-on-surface-variant text-xs">${{ svc.price }}</span>
+              </div>
+            </div>
+          </div>
           <app-dropdown id="newApptSpecialist" v-model="newAppt.specialist" label="Especialista" :options="specialistOptions" optionLabel="label" optionValue="value" />
           <app-calendar id="newApptDate" v-model="newAppt.date" label="Fecha" :minDate="new Date()" />
           <app-dropdown id="newApptTime" v-model="newAppt.time" label="Hora" :options="timeOptions" optionLabel="label" optionValue="value" />
@@ -69,7 +88,7 @@
         <template #footer>
           <div class="flex justify-end gap-sm p-sm">
             <app-button label="CANCELAR" variant="outlined" @click="showDialog = false" />
-            <app-button label="GUARDAR CITA" icon="pi pi-check" @click="saveAppointment" />
+            <app-button label="GUARDAR CITA" icon="pi pi-check" :disabled="newAppt.service_ids.length === 0" @click="saveAppointment" />
           </div>
         </template>
       </p-dialog>
@@ -94,11 +113,20 @@ const filterDate = shallowRef(new Date());
 const filterSpecialist = shallowRef<number | null>(null);
 const appointments = shallowRef<any[]>([]);
 const specialistOptions = shallowRef<{ label: string; value: number | null }[]>([]);
-const serviceOptions = shallowRef<{ label: string; value: number }[]>([]);
+const serviceOptions = shallowRef<{ label: string; value: number; duration: number; price: number }[]>([]);
 
-const newAppt = ref({ customer: '', service: null as number | null, specialist: null as number | null, date: null as Date | null, time: null as string | null, notes: '' });
+const newAppt = ref({ customer: '', service_ids: [] as number[], specialist: null as number | null, date: null as Date | null, time: null as string | null, notes: '' });
 
 const timeOptions = ['09:00 AM','09:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','01:00 PM','01:30 PM','02:00 PM','02:30 PM','03:00 PM','03:30 PM'].map(t => ({ label: t, value: t }));
+
+function toggleAdminService(id: number) {
+  const idx = newAppt.value.service_ids.indexOf(id)
+  if (idx >= 0) {
+    newAppt.value.service_ids = newAppt.value.service_ids.filter(i => i !== id)
+  } else {
+    newAppt.value.service_ids = [...newAppt.value.service_ids, id]
+  }
+}
 
 const timeSlots = ['09:00 AM','09:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','12:30 PM','01:00 PM','01:30 PM','02:00 PM','02:30 PM','03:00 PM','03:30 PM','04:00 PM','04:30 PM'];
 
@@ -136,7 +164,11 @@ function getAppointments(date: string, slot: string) {
 const fetchAppointments = async () => {
   let query = supabase
     .from('appointments')
-    .select('id, customer_name, appointment_date, appointment_time, services(title), specialists(name)');
+    .select(`
+      id, customer_name, appointment_date, appointment_time,
+      appointment_services(service_id, services(title)),
+      specialists(name)
+    `);
 
   if (filterSpecialist.value) {
     query = query.eq('specialist_id', filterSpecialist.value);
@@ -149,14 +181,14 @@ const fetchAppointments = async () => {
     date: a.appointment_date,
     time: toDisplayTime(a.appointment_time),
     customer: a.customer_name,
-    service: a.services?.title || '-'
+    services: a.appointment_services?.map((as: any) => as.services?.title || '-') || []
   }));
 };
 
 const fetchOptions = async () => {
   const [{ data: specs }, { data: services }] = await Promise.all([
     supabase.from('specialists').select('id, name').eq('active', true).order('id'),
-    supabase.from('services').select('id, title').eq('active', true).order('id')
+    supabase.from('services').select('id, title, duration, price').eq('active', true).order('id')
   ]);
 
   specialistOptions.value = [
@@ -164,25 +196,36 @@ const fetchOptions = async () => {
     ...(specs || []).map(s => ({ label: s.name, value: s.id }))
   ];
 
-  serviceOptions.value = (services || []).map(s => ({ label: s.title, value: s.id }));
+  serviceOptions.value = (services || []).map(s => ({ label: s.title, value: s.id, duration: s.duration, price: s.price }));
 };
 
 const saveAppointment = async () => {
-  const { error } = await supabase.from('appointments').insert({
+  const { data: appointment, error: apptError } = await supabase.from('appointments').insert({
     customer_name: newAppt.value.customer,
-    service_id: newAppt.value.service,
     specialist_id: newAppt.value.specialist,
     appointment_date: newAppt.value.date?.toISOString().split('T')[0],
     appointment_time: newAppt.value.time,
     notes: newAppt.value.notes,
     status: 'Pendiente'
-  });
+  }).select('id').single();
 
-  if (!error) {
-    showDialog.value = false;
-    newAppt.value = { customer: '', service: null, specialist: null, date: null, time: null, notes: '' };
-    fetchAppointments();
+  if (apptError) return;
+
+  const { error: relError } = await supabase.from('appointment_services').insert(
+    newAppt.value.service_ids.map(service_id => ({
+      appointment_id: appointment.id,
+      service_id
+    }))
+  );
+
+  if (relError) {
+    await supabase.from('appointments').delete().eq('id', appointment.id);
+    return;
   }
+
+  showDialog.value = false;
+  newAppt.value = { customer: '', service_ids: [], specialist: null, date: null, time: null, notes: '' };
+  fetchAppointments();
 };
 
 watch(filterSpecialist, () => fetchAppointments());

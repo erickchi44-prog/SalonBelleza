@@ -1,26 +1,39 @@
 <template>
-  <footer class="w-full bg-surface-container-low border-t border-outline-variant/20 mt-auto">
-    <div class="flex flex-col md:flex-row justify-between items-center py-xl px-margin-mobile md:px-margin-desktop max-w-[1200px] mx-auto">
-      <div class="mb-md md:mb-0 text-center md:text-left">
-        <h3 class="font-headline-md text-headline-md text-primary">Aura Luxe Salon</h3>
-        <p class="font-body-md text-body-md text-on-surface-variant max-w-xs mt-xs text-sm">
-          &copy; 2026 Aura Luxe Salon. Un oasis de belleza, bienestar y tranquilidad.
-        </p>
-      </div>
-      <div class="flex flex-wrap justify-center gap-md">
-        <router-link to="/services" class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm">
+  <footer class="w-full bg-surface border-t border-outline-variant/15 mt-auto">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-2 py-3 px-margin-mobile md:px-margin-desktop max-w-[1200px] mx-auto">
+      <div class="font-headline-sm text-sm text-primary">Aura Luxe Salon</div>
+      <div class="flex flex-wrap justify-center gap-x-4 gap-y-1">
+        <router-link to="/services" class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-xs no-underline">
           Servicios
         </router-link>
-        <router-link to="/booking" class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm">
+        <router-link to="/booking" class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-xs no-underline">
           Reservas
         </router-link>
-        <router-link to="/feedback" class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm">
+        <router-link to="/feedback" class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-xs no-underline">
           Valoraciones
         </router-link>
-        <a href="#" class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm">
-          Pol&iacute;ticas de Privacidad
+        <a href="#" class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-xs no-underline">
+          Pol&iacute;ticas
+        </a>
+        <a href="#" class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-xs no-underline">
+          Contacto
         </a>
       </div>
+      <div class="flex gap-1">
+        <a href="#" class="w-7 h-7 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 rounded transition-all no-underline text-xs">
+          <i class="pi pi-instagram"></i>
+        </a>
+        <a href="#" class="w-7 h-7 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 rounded transition-all no-underline text-xs">
+          <i class="pi pi-facebook"></i>
+        </a>
+        <a href="#" class="w-7 h-7 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 rounded transition-all no-underline text-xs">
+          <i class="pi pi-whatsapp"></i>
+        </a>
+        <a href="#" class="w-7 h-7 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 rounded transition-all no-underline text-xs">
+          <i class="pi pi-tiktok"></i>
+        </a>
+      </div>
+      <div class="text-on-surface-variant/60 font-label-sm text-[10px]">&copy; 2026 Aura Luxe Salon</div>
     </div>
   </footer>
 </template>

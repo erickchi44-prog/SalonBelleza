@@ -1,19 +1,19 @@
 <template>
   <div class="min-h-screen flex flex-col bg-background">
     <app-header />
-    <main class="flex-grow pt-20 pb-20 md:pb-0">
+    <main class="flex-grow pt-16 pb-16 md:pb-0">
       <router-view />
     </main>
     <app-footer />
 
     <!-- Bottom Tab Bar (Mobile) -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface/95 backdrop-blur-md border-t border-outline-variant/20 safe-area-pb">
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface border-t border-outline-variant/15 safe-area-pb">
       <div class="flex items-center justify-around h-16">
         <router-link
           v-for="tab in tabs"
           :key="tab.path"
           :to="tab.path"
-          class="flex flex-col items-center justify-center gap-0.5 px-3 py-1 min-w-0 transition-colors"
+          class="flex flex-col items-center justify-center gap-0.5 px-3 py-1 min-w-0 transition-colors no-underline"
           :class="isActive(tab.path) ? 'text-primary' : 'text-on-surface-variant/70'"
           :aria-label="tab.label"
         >
@@ -47,9 +47,9 @@ const tabs = computed<Tab[]>(() => [
   { label: 'Reservar', path: '/booking', icon: 'pi pi-calendar-plus' },
   { label: 'Valoraciones', path: '/feedback', icon: 'pi pi-star' },
   {
-    label: user.value ? 'Cuenta' : 'Ingresar',
-    path: user.value ? '/booking' : '/login',
-    icon: user.value ? 'pi pi-user' : 'pi pi-sign-in'
+    label: user.value ? 'Mis Citas' : 'Ingresar',
+    path: user.value ? '/my-appointments' : '/login',
+    icon: user.value ? 'pi pi-calendar' : 'pi pi-sign-in'
   }
 ])
 
