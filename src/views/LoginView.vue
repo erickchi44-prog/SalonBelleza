@@ -1,116 +1,128 @@
 <template>
-  <main class="flex-1 min-h-0 flex flex-col md:flex-row">
-    <!-- Left Side: Image Overlay -->
-    <section class="relative w-full md:w-1/2 min-h-[350px] md:min-h-0 overflow-hidden flex flex-col justify-end md:flex-1">
-      <div class="absolute inset-0 bg-black/20 z-10"></div>
-      <img
-        class="absolute inset-0 w-full h-full object-cover"
-        alt="Interior de spa lujoso y tranquilo"
-        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFONwbKKI4qg71dm7dse3OMWxf9lYy1ysa7sjuofNlW0mV6EfYCu2-BGBswvxTT0uOvAmayMzEzESXWtv7tPS2vxSACBW5xB3X1jUvZ0jP7H2Im-bNPqP5wTQVT67eOL5JqAzZx7cr47-m_WB_tsqsr_0KnF3TK7NovREcwIFOeSYBRyT1hDHM_ruv6lxQkKG20QF8cVPV1LVULL8-erxvsAU4w4bhycbe7JjKqtFcyqFMwqyftd-p9ZCPl8My_wYiDyJ_EQ54uTk"
-        loading="lazy"
-      />
-      <div class="absolute inset-0 z-20 flex flex-col justify-end p-margin-mobile md:p-xl bg-gradient-to-t from-black/60 to-transparent">
-        <h2 class="font-display-lg text-white mb-sm opacity-90 text-3xl md:text-5xl">Bienvenido de nuevo</h2>
-        <p class="font-body-lg text-white/80 max-w-md text-sm md:text-base">
-          Regresa a tu oasis de tranquilidad y redescubre tu brillo interior con nuestros servicios de autor.
+  <main class="min-h-screen flex flex-col md:flex-row">
+    <!-- Left: Gradient Panel -->
+    <section class="relative w-full md:w-[45%] min-h-[300px] md:min-h-0 overflow-hidden flex flex-col justify-center md:flex-1 bg-gradient-to-br from-[#2c1600] via-[#5a3c20] to-primary">
+      <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-white/[0.03]"></div>
+      <div class="absolute -bottom-16 -left-16 w-48 h-48 rounded-full bg-[#eebd8e]/[0.08]"></div>
+      <div class="absolute top-1/3 right-1/4 w-2 h-2 rounded-full bg-white/10"></div>
+      <div class="absolute bottom-1/4 right-1/3 w-1.5 h-1.5 rounded-full bg-white/10"></div>
+
+      <div class="relative z-10 px-margin-mobile md:px-xl max-w-md mx-auto w-full">
+        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 mb-8">
+          <i class="pi pi-sparkles text-[#eebd8e] text-xs"></i>
+          <span class="font-label-sm text-[10px] text-[#eebd8e] uppercase tracking-[0.18em] font-semibold">Aura Luxe Salon</span>
+        </div>
+        <h2 class="font-display-lg text-white text-3xl md:text-4xl lg:text-5xl leading-tight mb-5">
+          Donde el arte <span class="text-[#eebd8e] italic">encuentra</span> tu belleza
+        </h2>
+        <p class="font-body-md text-white/60 max-w-sm text-sm md:text-base leading-relaxed">
+          Accede a tu cuenta para gestionar tus citas, descubrir promociones exclusivas y conectar con tus especialistas favoritos.
         </p>
       </div>
     </section>
 
-    <!-- Right Side: Login Form -->
-    <section class="w-full md:w-1/2 flex items-center justify-center p-margin-mobile md:p-margin-desktop bg-surface md:flex-1 overflow-y-auto">
-      <div class="w-full max-w-md space-y-lg">
-        <div class="space-y-xs">
-          <h1 class="font-headline-lg text-headline-lg text-on-surface text-3xl">Iniciar Sesi&oacute;n</h1>
-          <p class="font-body-md text-on-surface-variant text-sm">
-            Ingresa tus credenciales para gestionar tus citas.
-          </p>
+    <!-- Right: Form Panel -->
+    <section class="w-full md:w-[55%] flex items-center justify-center p-margin-mobile md:p-xl bg-surface md:flex-1 overflow-y-auto">
+      <div class="w-full max-w-sm animate-fade-in">
+        <div class="flex items-center gap-2.5 mb-9">
+          <span class="w-8 h-8 bg-primary flex items-center justify-center">
+            <i class="pi pi-sparkles text-on-primary text-sm"></i>
+          </span>
+          <span class="font-headline-md text-primary text-lg tracking-tight">Aura Luxe</span>
         </div>
 
-        <form @submit.prevent="handleLogin" class="space-y-md">
+        <h1 class="font-headline-md text-on-surface text-2xl font-semibold">Bienvenido de vuelta</h1>
+        <p class="font-body-md text-on-surface-variant text-sm mb-8">Ingresa tus credenciales para continuar.</p>
+
+        <form @submit.prevent="handleLogin" class="space-y-5">
           <div class="relative">
-            <app-input
+            <i class="pi pi-envelope absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant/80 z-10 text-sm pointer-events-none"></i>
+            <input
               id="email"
               v-model="email"
-              label="Correo electr&oacute;nico"
               type="email"
-              required
-              :error="errors.email"
+              autocomplete="email"
+              placeholder="Correo electr&oacute;nico"
+              class="w-full h-[50px] pl-11 pr-4 bg-white border border-outline-variant/60 text-on-surface font-body-md text-sm outline-none transition-all duration-250 placeholder:text-outline-variant/60 focus:border-primary focus:shadow-[0_0_0_4px_rgba(121,84,46,0.08)]"
+              :class="{ 'border-error': errors.email }"
               @blur="validateEmail"
             />
+            <p v-if="errors.email" class="text-error font-label-sm text-xs mt-1.5">{{ errors.email }}</p>
           </div>
 
           <div class="relative">
-            <app-password
+            <i class="pi pi-lock absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant/80 z-10 text-sm pointer-events-none"></i>
+            <input
               id="password"
               v-model="password"
-              label="Contrase&ntilde;a"
-              required
-              :feedback="false"
-              :error="errors.password"
+              :type="showPassword ? 'text' : 'password'"
+              autocomplete="current-password"
+              placeholder="Contrase&ntilde;a"
+              class="w-full h-[50px] pl-11 pr-12 bg-white border border-outline-variant/60 text-on-surface font-body-md text-sm outline-none transition-all duration-250 placeholder:text-outline-variant/60 focus:border-primary focus:shadow-[0_0_0_4px_rgba(121,84,46,0.08)]"
+              :class="{ 'border-error': errors.password }"
               @blur="validatePassword"
             />
-            <div class="flex justify-end mt-xs">
-              <a href="#" class="font-label-sm text-label-sm text-primary hover:underline transition-all">
-                &iquest;Olvidaste tu contrase&ntilde;a?
-              </a>
+            <button
+              type="button"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-outline-variant/60 hover:text-primary transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer bg-transparent border-none"
+              @click="showPassword = !showPassword"
+              :aria-label="showPassword ? 'Ocultar contrase&ntilde;a' : 'Mostrar contrase&ntilde;a'"
+              tabindex="-1"
+            >
+              <i :class="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" class="text-sm"></i>
+            </button>
+            <p v-if="errors.password" class="text-error font-label-sm text-xs mt-1.5">{{ errors.password }}</p>
+          </div>
+
+          <div class="flex justify-end -mt-1">
+            <router-link to="/forgot-password" class="font-label-sm text-xs text-primary hover:text-primary/80 transition-colors">
+              &iquest;Olvidaste tu contrase&ntilde;a?
+            </router-link>
+          </div>
+
+          <transition name="fade">
+            <div v-if="serverError" class="flex items-start gap-2.5 p-3 bg-error-container/20 border border-error/20" role="alert">
+              <i class="pi pi-exclamation-circle text-error mt-0.5 shrink-0"></i>
+              <p class="font-label-sm text-xs text-on-error-container">{{ serverError }}</p>
             </div>
-          </div>
+          </transition>
 
-          <div v-if="serverError" class="p-sm bg-error-container/30 border border-error/30">
-            <p class="font-label-sm text-xs text-error">{{ serverError }}</p>
-          </div>
-
-          <div class="pt-base">
-            <app-button
-              type="submit"
-              label="INICIAR SESI&Oacute;N"
-              :loading="loading"
-              class="w-full py-md"
-            />
-          </div>
+          <app-button
+            type="submit"
+            label="INICIAR SESI&Oacute;N"
+            :loading="loading"
+            class="!w-full !py-[15px]"
+          />
         </form>
 
-        <div class="text-center pt-md border-t border-outline-variant/30">
-          <p class="font-body-md text-on-surface-variant text-sm">
-            &iquest;No tienes una cuenta?
-            <router-link to="/register" class="text-primary font-semibold hover:underline transition-all ml-xs">
-              Reg&iacute;strate
-            </router-link>
-          </p>
-        </div>
-
-        <!--<div class="text-center space-y-sm">
-          <p class="font-label-sm text-xs text-on-surface-variant uppercase tracking-widest">O contin&uacute;a con</p>
-          <div class="flex justify-center gap-md">
-            <button class="p-sm rounded-full border border-outline-variant hover:border-primary hover:bg-primary-fixed/30 transition-all text-on-surface cursor-pointer" aria-label="Ingresar con Google">
-              <i class="pi pi-google text-sm"></i>
-            </button>
-            <button class="p-sm rounded-full border border-outline-variant hover:border-primary hover:bg-primary-fixed/30 transition-all text-on-surface cursor-pointer" aria-label="Ingresar con Facebook">
-              <i class="pi pi-facebook text-sm"></i>
-            </button>
-          </div>
-        </div> -->
+        <p class="text-center mt-7 font-body-md text-sm text-on-surface-variant">
+          &iquest;No tienes cuenta?
+          <router-link to="/register" class="text-primary font-semibold hover:text-primary/80 transition-colors">Reg&iacute;strate gratis</router-link>
+        </p>
       </div>
     </section>
   </main>
 </template>
 
 <script setup lang="ts">
-import { shallowRef, reactive } from 'vue';
+import { shallowRef, reactive, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '../stores/auth';
-import AppInput from '../components/atoms/AppInput.vue';
-import AppPassword from '../components/atoms/AppPassword.vue';
 import AppButton from '../components/atoms/AppButton.vue';
 
 const authStore = useAuthStore();
 const { loading } = storeToRefs(authStore);
 const { login } = authStore;
+
 const email = shallowRef('');
 const password = shallowRef('');
 const serverError = shallowRef('');
+const showPassword = shallowRef(false);
 const errors = reactive<{ email?: string; password?: string }>({});
+
+onMounted(() => {
+  setTimeout(() => document.getElementById('email')?.focus(), 100)
+});
 
 function validateEmail() {
   if (!email.value.includes('@')) {
@@ -143,3 +155,35 @@ const handleLogin = async () => {
   }
 };
 </script>
+
+<style scoped>
+.animate-fade-in {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation: none;
+  }
+}
+</style>

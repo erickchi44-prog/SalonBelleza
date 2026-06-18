@@ -122,6 +122,7 @@ export interface KpiCard {
   icon: string
   iconBg: string
   iconColor: string
+  dotColor: string
 }
 
 export interface QuickAction {

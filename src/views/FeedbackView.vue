@@ -10,23 +10,33 @@
       <h2 class="font-headline-md text-lg text-on-surface flex items-center gap-sm">
         <i class="pi pi-star text-primary"></i> Dejar una Valoraci&oacute;n
       </h2>
-      <app-dropdown
-        id="feedbackService"
-        v-model="feedbackForm.serviceId"
-        label="Servicio"
-        :options="serviceSelectOptions"
-        optionLabel="label"
-        optionValue="value"
-      />
+      <div v-if="loadingOptions">
+        <div class="h-10 bg-surface-container-high animate-pulse"></div>
+      </div>
+      <template v-else>
+        <app-dropdown
+          id="feedbackService"
+          v-model="feedbackForm.serviceId"
+          label="Servicio"
+          :options="serviceSelectOptions"
+          optionLabel="label"
+          optionValue="value"
+          :error="errors.serviceId"
+          @blur="validateField('serviceId')"
+        />
+      </template>
       <div class="space-y-xs">
         <label class="font-label-md text-xs text-on-surface-variant uppercase tracking-widest">Calificaci&oacute;n</label>
-        <app-rating v-model="feedbackForm.rating" />
+        <app-rating v-model="feedbackForm.rating" @blur="errors.rating = feedbackForm.rating ? '' : 'Selecciona una calificaci&oacute;n.'" />
+        <p v-if="errors.rating" class="text-error text-label-sm">{{ errors.rating }}</p>
       </div>
       <app-textarea
         id="feedbackComment"
         v-model="feedbackForm.comment"
         label="Tu comentario"
         :rows="4"
+        :error="errors.comment"
+        @blur="validateField('comment')"
       />
       <app-button label="ENVIAR VALORACI&Oacute;N" icon="pi pi-send" class="w-full" @click="submitFeedback" :loading="sending" />
     </div>
@@ -76,15 +86,38 @@ import PToast from 'primevue/toast';
 const router = useRouter();
 const toast = useToast();
 const sending = shallowRef(false);
+const loadingOptions = shallowRef(true);
+const errors = reactive<Record<string, string>>({});
 
 const { reviews, loading, fetchReviews } = useFeedback();
 
 const feedbackForm = reactive({ serviceId: null as number | null, rating: 0, comment: '' });
 const serviceSelectOptions = shallowRef<{ label: string; value: number }[]>([]);
 
+function validateField(field: string) {
+  delete errors[field];
+  switch (field) {
+    case 'serviceId':
+      if (!feedbackForm.serviceId) errors.serviceId = 'Selecciona un servicio.';
+      break;
+    case 'comment':
+      if (!feedbackForm.comment.trim()) errors.comment = 'Escribe un comentario.';
+      break;
+  }
+}
+
+function validateAll(): boolean {
+  ['serviceId', 'comment'].forEach(validateField);
+  return Object.keys(errors).length === 0;
+}
+
 const submitFeedback = async () => {
-  if (!feedbackForm.serviceId || feedbackForm.rating === 0 || !feedbackForm.comment) {
-    toast.add({ severity: 'warn', summary: 'Campos incompletos', detail: 'Por favor completa todos los campos.', life: 3000 });
+  errors.serviceId = '';
+  errors.comment = '';
+  if (!validateAll()) return;
+
+  if (!feedbackForm.rating) {
+    errors.rating = 'Selecciona una calificaci&oacute;n.';
     return;
   }
 
@@ -128,5 +161,6 @@ onMounted(async () => {
   fetchReviews();
   const { data } = await supabase.from('services').select('id, title').eq('active', true).order('id');
   serviceSelectOptions.value = (data || []).map(s => ({ label: s.title, value: s.id }));
+  loadingOptions.value = false;
 });
 </script>

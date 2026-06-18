@@ -84,10 +84,10 @@
                 </div>
                 <span class="font-label text-[10px] uppercase tracking-widest px-2 py-0.5 shrink-0" :class="statusClass(appt.status)">{{ appt.status }}</span>
                 <div class="flex gap-1 shrink-0">
-                  <button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-danger hover:bg-danger/5 transition-colors" title="Cancelar" @click="openCancelDialog(appt)">
+                  <button class="min-w-[44px] min-h-[44px] flex items-center justify-center text-on-surface-variant hover:text-danger hover:bg-danger/5 transition-colors" title="Cancelar" aria-label="Cancelar cita" @click="openCancelDialog(appt)">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"/></svg>
                   </button>
-                  <button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors" title="Reagendar" @click="openReschedule(appt)">
+                  <button class="min-w-[44px] min-h-[44px] flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors" title="Reagendar" aria-label="Reagendar cita" @click="openReschedule(appt)">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2" stroke-linecap="round"/></svg>
                   </button>
                 </div>
@@ -111,10 +111,10 @@
                 </div>
                 <span class="font-label text-[10px] uppercase tracking-widest px-2 py-0.5 shrink-0" :class="statusClass(appt.status)">{{ appt.status }}</span>
                 <div class="flex gap-1 shrink-0">
-                  <button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-danger hover:bg-danger/5 transition-colors" title="Cancelar" @click="openCancelDialog(appt)">
+                  <button class="min-w-[44px] min-h-[44px] flex items-center justify-center text-on-surface-variant hover:text-danger hover:bg-danger/5 transition-colors" title="Cancelar" aria-label="Cancelar cita" @click="openCancelDialog(appt)">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"/></svg>
                   </button>
-                  <button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors" title="Reagendar" @click="openReschedule(appt)">
+                  <button class="min-w-[44px] min-h-[44px] flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors" title="Reagendar" aria-label="Reagendar cita" @click="openReschedule(appt)">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2" stroke-linecap="round"/></svg>
                   </button>
                 </div>
@@ -255,7 +255,7 @@
             <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="1.5"/></svg>
             <h1 class="font-display text-base md:text-lg text-on-surface font-medium">Reagendar</h1>
           </div>
-          <button class="w-8 h-8 flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors" @click="showReschedule = false">
+          <button class="min-w-[44px] min-h-[44px] flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors" aria-label="Cerrar" @click="showReschedule = false">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"/></svg>
           </button>
         </div>
@@ -315,11 +315,12 @@
             <button
               v-for="slot in rescheduleTimeSlots"
               :key="slot"
-              class="h-10 font-label text-xs uppercase tracking-wider border transition-all duration-200 cursor-pointer rounded-none min-h-[44px]"
+              class="min-h-[44px] font-label text-xs uppercase tracking-wider border transition-all duration-200 cursor-pointer rounded-none"
               :class="rescheduleTime === slot
                 ? 'bg-primary text-on-primary border-primary'
                 : 'border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary'"
               @click="rescheduleTime = slot"
+              :aria-label="`Horario ${slot}`"
             >{{ slot }}</button>
           </div>
           <div class="flex justify-between">

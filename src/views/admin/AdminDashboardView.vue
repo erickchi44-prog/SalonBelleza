@@ -2,10 +2,10 @@
   <div class="space-y-lg">
     <!-- Loading -->
     <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-md">
-      <div v-for="n in 4" :key="n" class="bg-surface border border-outline-variant/30 p-md animate-pulse space-y-sm">
-        <div class="h-3 bg-surface-container-high w-1/2"></div>
-        <div class="h-8 bg-surface-container-high w-1/3"></div>
-        <div class="h-3 bg-surface-container-high w-1/4"></div>
+      <div v-for="n in 4" :key="n" class="bg-surface border border-outline-variant/30 rounded-xl p-md animate-pulse space-y-sm">
+        <div class="h-3 bg-surface-container-high w-1/2 rounded"></div>
+        <div class="h-8 bg-surface-container-high w-1/3 rounded"></div>
+        <div class="h-3 bg-surface-container-high w-1/4 rounded"></div>
       </div>
     </div>
 
@@ -13,92 +13,118 @@
       <!-- KPI Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-md">
         <div v-for="kpi in kpis" :key="kpi.label"
-          class="bg-surface border border-outline-variant/30 p-md flex flex-col gap-sm hover:border-primary/40 transition-all duration-300 shadow-sm">
-          <div class="flex items-center justify-between">
-            <span class="font-label-sm text-xs text-on-surface-variant uppercase tracking-widest">{{ kpi.label }}</span>
-            <div class="w-9 h-9 rounded-full flex items-center justify-center" :class="kpi.iconBg">
-              <i :class="[kpi.icon, kpi.iconColor, 'text-sm']"></i>
-            </div>
+          class="bg-surface border border-outline-variant/30 rounded-xl p-md transition-all duration-300">
+          <div class="font-label-sm text-xs text-on-surface-variant uppercase tracking-widest flex items-center gap-sm mb-md">
+            <span class="w-2 h-2 rounded-full inline-block" :style="{ background: kpi.dotColor }"></span>
+            {{ kpi.label }}
           </div>
           <p class="font-display-lg text-3xl font-bold text-on-surface">{{ kpi.value }}</p>
-          <div class="flex items-center gap-xs text-xs" :class="kpi.trend > 0 ? 'text-success' : 'text-danger'">
+          <div class="flex items-center gap-xs text-xs mt-xs" :class="kpi.trend > 0 ? 'text-success' : 'text-danger'">
             <i :class="kpi.trend > 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down'" class="text-label-sm"></i>
             <span>{{ Math.abs(kpi.trend) }}% vs. mes anterior</span>
           </div>
         </div>
       </div>
 
-      <!-- Charts and Quick Actions -->
+      <!-- Timeline + Quick Actions -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-md">
-        <div class="lg:col-span-2 bg-surface border border-outline-variant/30 p-md shadow-sm">
-          <div class="flex items-center justify-between mb-md">
-            <h3 class="font-headline-md text-base text-on-surface">Citas Recientes</h3>
-            <router-link to="/admin/calendar" class="text-primary font-label-sm text-xs flex items-center gap-xs hover:underline">
-              Ver todas <i class="pi pi-arrow-right text-label-sm"></i>
-            </router-link>
+        <div class="lg:col-span-2 bg-surface border border-outline-variant/30 rounded-xl p-md">
+          <div class="flex items-center justify-between mb-lg">
+            <h3 class="font-headline-md text-sm text-on-surface flex items-center gap-sm">
+              <i class="pi pi-calendar-clock text-primary"></i> Citas de Hoy
+            </h3>
+            <span class="font-label-sm text-xs text-on-surface-variant">{{ todayDate }}</span>
           </div>
-          <p-datatable :value="recentBookings" class="text-sm" :rows="5" stripedRows>
-            <p-column field="customer" header="Cliente" />
-            <p-column header="Servicios">
-              <template #body="{ data }">
-                {{ data.services.join(', ') }}
-              </template>
-            </p-column>
-            <p-column field="specialist" header="Especialista" />
-            <p-column field="time" header="Hora" />
-            <p-column header="Estado">
-              <template #body="{ data }">
+          <div v-if="todayAppointments.length === 0" class="text-on-surface-variant text-sm py-lg text-center">
+            No hay citas programadas para hoy.
+          </div>
+          <div v-else class="relative pl-lg">
+            <div class="absolute left-[7px] top-2 bottom-2 w-0.5 bg-outline-variant/30"></div>
+            <div v-for="appt in todayAppointments" :key="appt.id" class="relative pb-lg last:pb-0">
+              <div class="absolute -left-lg top-1.5 w-[14px] h-[14px] rounded-full bg-surface border-2 border-primary"></div>
+              <div class="flex items-start justify-between">
+                <div>
+                  <p class="font-label-md text-sm font-semibold text-on-surface">{{ appt.customer }}</p>
+                  <p class="text-xs text-on-surface-variant mt-0.5">{{ appt.services.join(', ') }}</p>
+                  <p class="text-xs text-primary mt-1">
+                    <i class="pi pi-clock text-label-sm mr-xs"></i>
+                    {{ appt.time }} &middot; {{ appt.specialist }}
+                  </p>
+                </div>
                 <span
-                  class="px-sm py-xs text-label-sm font-label-sm uppercase tracking-wider font-semibold"
-                  :class="{
-                    'bg-success-container text-on-success-container': data.status === 'Confirmada',
-                    'bg-warning-container text-on-warning-container': data.status === 'Pendiente',
-                    'bg-danger-container text-on-danger-container': data.status === 'Cancelada'
-                  }"
-                >{{ data.status }}</span>
-              </template>
-            </p-column>
-          </p-datatable>
+                  class="px-sm py-0.5 text-label-sm font-label-sm uppercase tracking-wider font-semibold rounded-full text-xs"
+                  :class="appt.status === 'Confirmada' ? 'bg-success-container/30 text-success' : appt.status === 'Pendiente' ? 'bg-warning-container/30 text-warning' : 'bg-danger-container/30 text-danger'"
+                >{{ appt.status }}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="bg-surface border border-outline-variant/30 p-md shadow-sm space-y-sm">
-          <h3 class="font-headline-md text-base text-on-surface mb-md">Acciones R&aacute;pidas</h3>
-          <router-link
-            v-for="action in quickActions"
-            :key="action.label"
-            :to="action.path"
-            class="flex items-center gap-md p-sm border border-outline-variant/20 hover:border-primary hover:bg-primary-container/10 transition-all duration-300 group cursor-pointer"
-          >
-            <div class="w-9 h-9 flex items-center justify-center bg-primary/10 group-hover:bg-primary/20 transition-all">
-              <i :class="[action.icon, 'text-primary text-sm']"></i>
-            </div>
-            <span class="font-label-md text-sm text-on-surface group-hover:text-primary transition-colors">{{ action.label }}</span>
-            <i class="pi pi-chevron-right ml-auto text-label-sm text-outline-variant group-hover:text-primary transition-colors"></i>
-          </router-link>
+        <div class="bg-surface border border-outline-variant/30 rounded-xl p-md">
+          <h3 class="font-headline-md text-sm text-on-surface mb-md flex items-center gap-sm">
+            <i class="pi pi-bolt text-primary"></i> Acciones Rápidas
+          </h3>
+          <div class="grid grid-cols-2 gap-xs">
+            <router-link
+              v-for="action in quickActions"
+              :key="action.label"
+              :to="action.path"
+              class="flex items-center gap-sm p-sm rounded-lg border border-outline-variant/15 hover:border-primary/25 hover:bg-primary-container/5 transition-all duration-200 group"
+            >
+              <i :class="[action.icon, 'text-primary text-sm shrink-0']"></i>
+              <span class="font-label-sm text-xs text-on-surface group-hover:text-primary transition-colors leading-tight">{{ action.label }}</span>
+            </router-link>
+          </div>
+          <div class="mt-md p-md rounded-lg bg-primary-container/10 border border-primary/10">
+            <div class="font-label-sm text-xs font-semibold text-on-surface mb-xs">📈 Resumen Rápido</div>
+            <div class="text-xs text-on-surface-variant">Ocupación: 78% · Prom. cita: $68 · Cancelación: 4%</div>
+          </div>
         </div>
       </div>
 
-      <!-- Today's Appointments -->
-      <div class="bg-surface border border-outline-variant/30 p-md shadow-sm">
+      <!-- Recent Bookings -->
+      <div class="bg-surface border border-outline-variant/30 rounded-xl p-md">
         <div class="flex items-center justify-between mb-md">
-          <h3 class="font-headline-md text-base text-on-surface flex items-center gap-sm">
-            <i class="pi pi-calendar-clock text-primary"></i> Citas de Hoy
+          <h3 class="font-headline-md text-sm text-on-surface flex items-center gap-sm">
+            <i class="pi pi-list-bullet text-primary"></i> Citas Recientes
           </h3>
-          <span class="font-label-sm text-xs text-on-surface-variant">{{ todayDate }}</span>
+          <router-link to="/admin/calendar" class="text-primary font-label-sm text-xs flex items-center gap-xs hover:underline">
+            Ver todas <i class="pi pi-arrow-right text-label-sm"></i>
+          </router-link>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-md">
-          <div
-            v-for="appt in todayAppointments"
-            :key="appt.id"
-            class="border-l-4 border-primary pl-md py-sm bg-primary-container/5"
-          >
-            <p class="font-label-md text-sm font-semibold text-on-surface">{{ appt.customer }}</p>
-            <p class="text-xs text-on-surface-variant">{{ appt.services.join(', ') }}</p>
-            <div class="flex items-center gap-xs mt-xs text-xs text-primary">
-              <i class="pi pi-clock text-label-sm"></i>
-              <span>{{ appt.time }} &middot; {{ appt.specialist }}</span>
-            </div>
-          </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-outline-variant/20">
+                <th class="text-left font-label-md text-xs text-on-surface-variant/60 uppercase tracking-widest py-sm pr-md">Cliente</th>
+                <th class="text-left font-label-md text-xs text-on-surface-variant/60 uppercase tracking-widest py-sm pr-md">Servicios</th>
+                <th class="text-left font-label-md text-xs text-on-surface-variant/60 uppercase tracking-widest py-sm pr-md">Especialista</th>
+                <th class="text-left font-label-md text-xs text-on-surface-variant/60 uppercase tracking-widest py-sm pr-md">Hora</th>
+                <th class="text-left font-label-md text-xs text-on-surface-variant/60 uppercase tracking-widest py-sm pr-md">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row, i) in recentBookings" :key="i" class="border-b border-outline-variant/10 last:border-b-0 hover:bg-primary-container/5 transition-colors">
+                <td class="py-sm pr-md font-semibold text-on-surface">{{ row.customer }}</td>
+                <td class="py-sm pr-md text-on-surface-variant/80">{{ row.services.join(', ') }}</td>
+                <td class="py-sm pr-md text-on-surface-variant/80">{{ row.specialist }}</td>
+                <td class="py-sm pr-md text-on-surface-variant/80">{{ row.time }}</td>
+                <td class="py-sm">
+                  <span
+                    class="px-sm py-0.5 text-label-sm font-label-sm uppercase tracking-wider font-semibold rounded-full text-xs"
+                    :class="{
+                      'bg-success-container/30 text-success': row.status === 'Confirmada',
+                      'bg-warning-container/30 text-warning': row.status === 'Pendiente',
+                      'bg-danger-container/30 text-danger': row.status === 'Cancelada'
+                    }"
+                  >{{ row.status }}</span>
+                </td>
+              </tr>
+              <tr v-if="recentBookings.length === 0">
+                <td colspan="5" class="text-center py-lg text-on-surface-variant/40 text-sm">No hay citas recientes</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </template>
@@ -109,16 +135,15 @@
 import { shallowRef, onMounted } from 'vue';
 import { supabase } from '../../lib/supabase';
 import type { KpiCard, QuickAction, AppointmentDisplay } from '../../types';
-import PDataTable from 'primevue/datatable';
-import PColumn from 'primevue/column';
+
 
 const todayDate = new Date().toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 const loading = shallowRef(true);
 const kpis = shallowRef<KpiCard[]>([
-  { label: 'Citas Hoy', value: '0', trend: 0, icon: 'pi pi-calendar', iconBg: 'bg-primary/10', iconColor: 'text-primary' },
-  { label: 'Ingresos del Mes', value: '$0', trend: 0, icon: 'pi pi-dollar', iconBg: 'bg-success-container/50', iconColor: 'text-success' },
-  { label: 'Nuevos Clientes', value: '0', trend: 0, icon: 'pi pi-user-plus', iconBg: 'bg-primary/10', iconColor: 'text-primary' },
-  { label: 'Valoraci&oacute;n Promedio', value: '0.0', trend: 0, icon: 'pi pi-star', iconBg: 'bg-warning-container/50', iconColor: 'text-warning' }
+  { label: 'Citas Hoy', value: '0', trend: 0, icon: 'pi pi-calendar', iconBg: 'bg-primary/10', iconColor: 'text-primary', dotColor: '#eebd8e' },
+  { label: 'Ingresos del Mes', value: '$0', trend: 0, icon: 'pi pi-dollar', iconBg: 'bg-success-container/50', iconColor: 'text-success', dotColor: '#22c55e' },
+  { label: 'Nuevos Clientes', value: '0', trend: 0, icon: 'pi pi-user-plus', iconBg: 'bg-primary/10', iconColor: 'text-primary', dotColor: '#60a5fa' },
+  { label: 'Valoraci&oacute;n Promedio', value: '0.0', trend: 0, icon: 'pi pi-star', iconBg: 'bg-warning-container/50', iconColor: 'text-warning', dotColor: '#eab308' }
 ]);
 
 const recentBookings = shallowRef<AppointmentDisplay[]>([]);
@@ -150,10 +175,10 @@ onMounted(async () => {
     : '0.0';
 
   kpis.value = [
-    { label: 'Citas Hoy', value: String(todayCount || 0), trend: 12, icon: 'pi pi-calendar', iconBg: 'bg-primary/10', iconColor: 'text-primary' },
-    { label: 'Ingresos del Mes', value: '$0', trend: 8, icon: 'pi pi-dollar', iconBg: 'bg-success-container/50', iconColor: 'text-success' },
-    { label: 'Nuevos Clientes', value: String(monthCount || 0), trend: 5, icon: 'pi pi-user-plus', iconBg: 'bg-primary/10', iconColor: 'text-primary' },
-    { label: 'Valoraci&oacute;n Promedio', value: avgRating, trend: 3, icon: 'pi pi-star', iconBg: 'bg-warning-container/50', iconColor: 'text-warning' }
+    { label: 'Citas Hoy', value: String(todayCount || 0), trend: 12, icon: 'pi pi-calendar', iconBg: 'bg-primary/10', iconColor: 'text-primary', dotColor: '#eebd8e' },
+    { label: 'Ingresos del Mes', value: '$0', trend: 8, icon: 'pi pi-dollar', iconBg: 'bg-success-container/50', iconColor: 'text-success', dotColor: '#22c55e' },
+    { label: 'Nuevos Clientes', value: String(monthCount || 0), trend: 5, icon: 'pi pi-user-plus', iconBg: 'bg-primary/10', iconColor: 'text-primary', dotColor: '#60a5fa' },
+    { label: 'Valoraci&oacute;n Promedio', value: avgRating, trend: 3, icon: 'pi pi-star', iconBg: 'bg-warning-container/50', iconColor: 'text-warning', dotColor: '#eab308' }
   ];
 
   recentBookings.value = (bookings || []).map((b: any) => ({

@@ -13,15 +13,16 @@
     </section>
 
     <!-- Category Filter -->
-    <div class="flex gap-xs pb-xl justify-center flex-wrap">
+    <div class="flex gap-xs pb-xl justify-center flex-wrap" role="group" aria-label="Filtrar por categor&iacute;a">
       <button
         v-for="cat in categories"
         :key="cat"
-        class="px-lg py-sm font-label-sm text-xs tracking-widest uppercase whitespace-nowrap border cursor-pointer transition-all duration-300"
+        class="min-h-[44px] px-lg font-label-sm text-xs tracking-widest uppercase whitespace-nowrap border cursor-pointer transition-all duration-300"
         :class="selectedCategory === cat
           ? 'bg-primary text-on-primary border-primary'
           : 'bg-transparent text-on-surface-variant border-outline-variant/50 hover:border-primary hover:text-primary'"
         @click="selectedCategory = cat"
+        :aria-pressed="selectedCategory === cat"
       >
         {{ cat }}
       </button>
@@ -44,7 +45,7 @@
       <div
         v-for="service in filteredServices"
         :key="service.id"
-        class="card bg-white hover:-translate-y-1 transition-transform duration-400"
+        class="card bg-surface hover:-translate-y-1 transition-transform duration-400"
       >
         <!-- Image -->
         <div class="relative w-full h-[280px] bg-surface-container-high flex items-center justify-center text-3xl text-primary/40">
@@ -53,7 +54,7 @@
           </div>
           <i v-else :class="iconForCategory(service.category)"></i>
           <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/5"></div>
-          <span class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 font-label-sm text-[0.625rem] font-semibold uppercase tracking-wider text-primary">
+          <span class="absolute top-4 left-4 bg-surface/90 backdrop-blur px-3 py-1 font-label-sm text-[0.625rem] font-semibold uppercase tracking-wider text-primary">
             {{ service.category }}
           </span>
           <div class="price-tag">

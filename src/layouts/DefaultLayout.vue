@@ -1,13 +1,14 @@
 <template>
   <div class="min-h-screen flex flex-col bg-background">
     <app-header />
-    <main class="flex-grow pt-16 pb-16 md:pb-0">
+    <main class="flex-grow pt-16 pb-16 md:pb-0" role="main">
       <router-view />
     </main>
+    <div aria-live="polite" aria-atomic="true" class="sr-only"></div>
     <app-footer />
 
     <!-- Bottom Tab Bar (Mobile) -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface border-t border-outline-variant/15 safe-area-pb">
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface border-t border-outline-variant/15 safe-area-pb" aria-label="Navegaci&oacute;n principal">
       <div class="flex items-center justify-around h-16">
         <router-link
           v-for="tab in tabs"

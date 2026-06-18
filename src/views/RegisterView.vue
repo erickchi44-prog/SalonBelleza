@@ -1,5 +1,5 @@
 <template>
-  <main class="flex-1 min-h-0 flex flex-col md:flex-row">
+  <main class="min-h-screen flex flex-col md:flex-row">
     <section class="relative w-full md:w-1/2 min-h-[350px] md:min-h-0 overflow-hidden flex flex-col justify-end md:flex-1">
       <div class="absolute inset-0 bg-black/20 z-10"></div>
       <img
@@ -72,7 +72,7 @@
             @blur="validateField('confirmPassword')"
           />
 
-          <div v-if="serverError" class="p-sm bg-error-container/30 border border-error/30">
+          <div v-if="serverError" class="p-sm bg-error-container/30 border border-error/30" role="alert">
             <p class="font-label-sm text-xs text-error">{{ serverError }}</p>
           </div>
 

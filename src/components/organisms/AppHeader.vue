@@ -19,6 +19,9 @@
         <router-link to="/feedback" class="text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md text-label-md px-3 py-2 rounded">
           Valoraciones
         </router-link>
+        <button @click="toggleDark" class="min-w-[44px] min-h-[44px] flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" :aria-label="isDark ? 'Activar modo claro' : 'Activar modo oscuro'">
+          <i :class="isDark ? 'pi pi-sun' : 'pi pi-moon'" class="text-sm"></i>
+        </button>
         <template v-if="user">
           <router-link to="/my-appointments" class="text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md text-label-md px-3 py-2 rounded">
             Mis Citas
@@ -26,7 +29,7 @@
           <router-link to="/admin/dashboard" class="text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md text-label-md px-3 py-2 rounded">
             <i class="pi pi-cog"></i>
           </router-link>
-          <button @click="handleLogout" class="text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all font-label-md text-label-md p-2 rounded cursor-pointer">
+          <button @click="handleLogout" class="min-w-[44px] min-h-[44px] flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 transition-all rounded cursor-pointer">
             <i class="pi pi-sign-out"></i>
           </button>
         </template>
@@ -81,11 +84,14 @@
 import { shallowRef } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '../../stores/auth';
+import { useDarkMode } from '../../composables/useDarkMode';
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore);
 const { logout } = authStore;
 const mobileMenuOpen = shallowRef(false);
+
+const { isDark, toggle: toggleDark } = useDarkMode();
 
 const handleLogout = async () => {
   mobileMenuOpen.value = false;
@@ -109,5 +115,11 @@ const handleLogoutMobile = async () => {
 .slide-fade-leave-to {
   transform: translateY(-20px);
   opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .slide-fade-enter-active,
+  .slide-fade-leave-active {
+    transition: none;
+  }
 }
 </style>

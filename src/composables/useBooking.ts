@@ -191,9 +191,10 @@ export function useBooking() {
 
     loadingSubmit.value = true
 
+    const { data: profile } = await supabase.from('profiles').select('full_name').eq('id', u.id).single()
     const { data: appointment, error: apptError } = await supabase.from('appointments').insert({
       user_id: u.id,
-      customer_name: u.email,
+      customer_name: profile?.full_name || u.email,
       specialist_id: selectedSpecialistId.value,
       appointment_date: selectedDate.value?.toISOString().split('T')[0],
       appointment_time: toDbTime(selectedTime.value),

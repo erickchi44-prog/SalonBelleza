@@ -28,11 +28,12 @@
           <button
             v-for="slot in timeSlots"
             :key="slot"
-            class="py-sm font-label-sm text-xs border transition-all duration-200 cursor-pointer rounded-none uppercase tracking-wider"
+            class="min-h-[44px] font-label-sm text-xs border transition-all duration-200 cursor-pointer rounded-none uppercase tracking-wider"
             :class="selectedTime === slot
               ? 'bg-primary text-on-primary border-primary'
               : 'bg-surface border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary'"
             @click="$emit('update:selectedTime', slot)"
+            :aria-label="`Horario ${slot}`"
           >
             {{ slot }}
           </button>

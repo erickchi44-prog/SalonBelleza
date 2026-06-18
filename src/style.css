@@ -131,6 +131,70 @@ body {
   border-width: 0;
 }
 
+/* Dark mode overrides */
+.dark {
+  --color-primary: #eebd8e;
+  --color-surface-tint: #eebd8e;
+  --color-on-surface-variant: #c4b5a8;
+  --color-on-secondary-container: #c4b5a8;
+  --color-tertiary-fixed-dim: #857a73;
+  --color-secondary: #a69b90;
+  --color-error: #ffb4ab;
+  --color-surface-container-low: #252321;
+  --color-surface-dim: #141313;
+  --color-outline: #93877b;
+  --color-on-primary-container: #2c1600;
+  --color-error-container: #93000a;
+  --color-on-surface: #e3e2e0;
+  --color-on-secondary-fixed: #e3e2e0;
+  --color-on-secondary-fixed-variant: #c4b5a8;
+  --color-inverse-surface: #e3e2e0;
+  --color-primary-container: #61401b;
+  --color-on-tertiary: #1a1c1a;
+  --color-surface-bright: #3d3b39;
+  --color-surface-container-highest: #343331;
+  --color-primary-fixed-dim: #eebd8e;
+  --color-outline-variant: #50453b;
+  --color-surface-container-high: #2b2a28;
+  --color-on-primary-fixed-variant: #ffdcbd;
+  --color-tertiary-container: #605b57;
+  --color-surface-container: #1f1e1c;
+  --color-surface: #1a1c1a;
+  --color-background: #141313;
+  --color-on-background: #e3e2e0;
+  --color-tertiary-fixed: #cdc5c0;
+  --color-surface-variant: #50453b;
+  --color-on-tertiary-fixed-variant: #cdc5c0;
+  --color-on-primary-fixed: #ffdcbd;
+  --color-primary-fixed: #61401b;
+  --color-on-tertiary-container: #1a1c1a;
+  --color-on-error: #1a1c1a;
+  --color-secondary-fixed: #d2c4b9;
+  --color-on-secondary: #1a1c1a;
+  --color-inverse-on-surface: #2f312f;
+  --color-tertiary: #a69b90;
+  --color-on-primary: #2c1600;
+  --color-secondary-fixed-dim: #a69b90;
+  --color-secondary-container: #4e453c;
+  --color-surface-container-lowest: #0e0d0c;
+  --color-on-error-container: #ffdad6;
+  --color-on-tertiary-fixed: #cdc5c0;
+  --color-inverse-primary: #79542e;
+
+  --color-success: #4ade80;
+  --color-on-success: #052e16;
+  --color-success-container: #166534;
+  --color-on-success-container: #dcfce7;
+  --color-warning: #facc15;
+  --color-on-warning: #422006;
+  --color-warning-container: #713f12;
+  --color-on-warning-container: #fef9c3;
+  --color-danger: #fca5a5;
+  --color-on-danger: #450a0a;
+  --color-danger-container: #991b1b;
+  --color-on-danger-container: #fee2e2;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

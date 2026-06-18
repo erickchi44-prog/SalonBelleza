@@ -8,7 +8,7 @@
       placeholder=" "
       :disabled="disabled"
       fluid
-      :class="[{ 'border-error': error }]"
+      :class="error ? 'border-error' : ''"
       v-bind="$attrs"
     />
     <label

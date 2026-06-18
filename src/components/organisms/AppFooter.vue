@@ -20,16 +20,16 @@
         </a>
       </div>
       <div class="flex gap-1">
-        <a href="#" class="w-7 h-7 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 rounded transition-all no-underline text-xs">
+        <a href="#" class="min-w-[44px] min-h-[44px] flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 rounded transition-all no-underline text-xs" aria-label="Instagram">
           <i class="pi pi-instagram"></i>
         </a>
-        <a href="#" class="w-7 h-7 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 rounded transition-all no-underline text-xs">
+        <a href="#" class="min-w-[44px] min-h-[44px] flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 rounded transition-all no-underline text-xs" aria-label="Facebook">
           <i class="pi pi-facebook"></i>
         </a>
-        <a href="#" class="w-7 h-7 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 rounded transition-all no-underline text-xs">
+        <a href="#" class="min-w-[44px] min-h-[44px] flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 rounded transition-all no-underline text-xs" aria-label="WhatsApp">
           <i class="pi pi-whatsapp"></i>
         </a>
-        <a href="#" class="w-7 h-7 flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 rounded transition-all no-underline text-xs">
+        <a href="#" class="min-w-[44px] min-h-[44px] flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/8 rounded transition-all no-underline text-xs" aria-label="TikTok">
           <i class="pi pi-tiktok"></i>
         </a>
       </div>

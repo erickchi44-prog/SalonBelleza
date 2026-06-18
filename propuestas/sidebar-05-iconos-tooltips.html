@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propuesta 5 — Sidebar con iconos degradados + tooltips</title>
+<link href="https://cdn.jsdelivr.net/npm/primeicons@7.0.0/primeicons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #f8f9fb;
+    min-height: 100vh;
+    display: flex;
+    color: #1e1e2e;
+  }
+  .sidebar {
+    width: 80px;
+    background: #fff;
+    border-right: 1px solid #eef0f4;
+    display: flex; flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    position: fixed; top: 0; left: 0; bottom: 0;
+    z-index: 40;
+  }
+  .sidebar .logo {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f0f0ff, #e8e0ff);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.8rem; color: #7c3aed;
+    margin-bottom: 1.5rem;
+  }
+  .nav { flex: 1; display: flex; flex-direction: column; gap: 0.3rem; }
+  .nav-item {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    color: #bbb;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .nav-item i { font-size: 1.15rem; }
+  .nav-item:hover {
+    background: #f5f3ff;
+    color: #7c3aed;
+  }
+  .nav-item.active {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(124,58,237,0.25);
+  }
+  .nav-item .tooltip {
+    position: absolute;
+    left: calc(100% + 12px);
+    top: 50%; transform: translateY(-50%);
+    background: #1e1e2e;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.4rem 0.7rem;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .nav-item .tooltip::before {
+    content: '';
+    position: absolute; right: 100%; top: 50%; transform: translateY(-50%);
+    border: 5px solid transparent; border-right-color: #1e1e2e;
+  }
+  .nav-item:hover .tooltip { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .nav-item .tooltip { transition: none; } }
+  .profile {
+    display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #eef0f4;
+    width: 100%;
+    align-items: center;
+    padding: 0.75rem 0;
+  }
+  .profile .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.75rem; color: #7c3aed;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+  .profile .avatar:hover { box-shadow: 0 0 0 3px #ede9fe; }
+  .profile .logout {
+    width: 28px; height: 28px; border-radius: 8px;
+    border: none; background: transparent; color: #ddd;
+    cursor: pointer; font-size: 0.8rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .profile .logout:hover { color: #ef4444; background: #fef2f2; }
+  .main {
+    margin-left: 80px; flex: 1; display: flex; flex-direction: column;
+  }
+  .topbar {
+    height: 64px; background: #fff;
+    border-bottom: 1px solid #eef0f4;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem;
+  }
+  .topbar .left { display: flex; align-items: center; gap: 1rem; }
+  .topbar .left .breadcrumb { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: #bbb; }
+  .topbar .left .breadcrumb span { color: #555; }
+  .topbar .left h2 { font-size: 1.05rem; font-weight: 700; }
+  .topbar .actions { display: flex; gap: 0.5rem; }
+  .topbar .actions button {
+    width: 34px; height: 34px; border-radius: 10px;
+    border: none; background: #f5f5f7; color: #888;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .topbar .actions button:hover { background: #ececf1; color: #555; }
+  .content { flex: 1; padding: 2rem; }
+  .placeholder {
+    background: #fff; border-radius: 16px;
+    border: 1px solid #eef0f4;
+    padding: 2rem; text-align: center; color: #ccc; font-size: 0.9rem;
+  }
+</style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">AL</div>
+    <nav class="nav">
+      <a href="#" class="nav-item active">
+        <i class="pi pi-th-large"></i>
+        <span class="tooltip">Dashboard</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="pi pi-calendar"></i>
+        <span class="tooltip">Calendario</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="pi pi-users"></i>
+        <span class="tooltip">Especialistas</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="pi pi-percentage"></i>
+        <span class="tooltip">Promociones</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="pi pi-star"></i>
+        <span class="tooltip">Valoraciones</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="pi pi-clock"></i>
+        <span class="tooltip">Horarios</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="pi pi-chart-bar"></i>
+        <span class="tooltip">Analytics</span>
+      </a>
+    </nav>
+    <div class="profile">
+      <div class="avatar">A</div>
+      <button class="logout"><i class="pi pi-sign-out"></i></button>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <div class="left">
+        <div class="breadcrumb">Admin <i class="pi pi-chevron-right" style="font-size:0.5rem"></i> <span>Dashboard</span></div>
+        <h2>Dashboard</h2>
+      </div>
+      <div class="actions">
+        <button><i class="pi pi-moon"></i></button>
+        <button><i class="pi pi-home"></i></button>
+      </div>
+    </header>
+    <div class="content">
+      <div class="placeholder">Contenido principal — sidebar colapsada con tooltips al hover</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -5,13 +5,14 @@ import DefaultLayout from '../layouts/DefaultLayout.vue'
 import AdminLayout from '../layouts/AdminLayout.vue'
 
 const routes: RouteRecordRaw[] = [
+  { path: '/login',    name: 'login',    component: () => import('../views/LoginView.vue') },
+  { path: '/register', name: 'register', component: () => import('../views/RegisterView.vue') },
+  { path: '/forgot-password', name: 'forgot-password', component: () => import('../views/ForgotPasswordView.vue') },
   {
     path: '/',
     component: DefaultLayout,
     redirect: '/services',
     children: [
-      { path: 'login',    name: 'login',    component: () => import('../views/LoginView.vue') },
-      { path: 'register', name: 'register', component: () => import('../views/RegisterView.vue') },
       { path: 'services', name: 'services', component: () => import('../views/ServicesView.vue') },
       { path: 'booking',  name: 'booking',  component: () => import('../views/BookingView.vue') },
       { path: 'feedback', name: 'feedback', component: () => import('../views/FeedbackView.vue') },
@@ -44,7 +45,7 @@ const router = createRouter({
 router.beforeEach(async (to, _from, next) => {
   const { data: { user } } = await supabase.auth.getUser()
 
-  const publicRoutes = ['login', 'register', 'services', 'feedback']
+  const publicRoutes = ['login', 'register', 'forgot-password', 'services', 'feedback']
 
   if (!user && !publicRoutes.includes(to.name as string)) {
     return next({ name: 'login' })

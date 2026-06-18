@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propuesta 1 — Mini Sidebar + Top Nav</title>
+<link href="https://cdn.jsdelivr.net/npm/primeicons@7.0.0/primeicons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #f8f9fb;
+    display: flex;
+    color: #1e1e2e;
+    min-height: 100vh;
+  }
+  .sidebar {
+    width: 72px;
+    background: #fff;
+    border-right: 1px solid #eef0f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+    transition: width 0.25s cubic-bezier(0.4,0,0.2,1);
+    overflow: hidden;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 40;
+  }
+  .sidebar:hover { width: 240px; }
+  @media (prefers-reduced-motion: reduce) { .sidebar { transition: none; } }
+  .sidebar .logo {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 1rem;
+    margin-bottom: 1.5rem;
+    flex-shrink: 0;
+  }
+  .sidebar:hover .logo { width: auto; padding: 0 1rem; border-radius: 10px; gap: 0.5rem; }
+  .sidebar .logo-text { display: none; white-space: nowrap; }
+  .sidebar:hover .logo-text { display: inline; }
+  .nav { flex: 1; display: flex; flex-direction: column; gap: 0.25rem; width: 100%; padding: 0 0.5rem; }
+  .nav a {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 10px;
+    color: #888;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .nav a:hover { background: #f3f0ff; color: #7c3aed; }
+  .nav a.active { background: #7c3aed; color: #fff; }
+  .nav a i { font-size: 1.15rem; min-width: 20px; text-align: center; }
+  .nav a span { opacity: 0; transition: opacity 0.2s; }
+  .sidebar:hover .nav a span { opacity: 1; }
+  .profile {
+    width: 100%; padding: 0.5rem;
+    border-top: 1px solid #eef0f4;
+    margin-top: auto;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sidebar:hover .profile { justify-content: space-between; padding: 0.75rem 0.75rem; }
+  .profile .avatar {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.8rem; color: #7c3aed;
+    flex-shrink: 0;
+  }
+  .profile .info { display: none; }
+  .sidebar:hover .profile .info { display: block; }
+  .profile .info p { font-size: 0.75rem; font-weight: 600; color: #1e1e2e; }
+  .profile .info span { font-size: 0.65rem; color: #aaa; }
+  .profile .logout { display: none; color: #ccc; cursor: pointer; border: none; background: none; font-size: 1rem; }
+  .sidebar:hover .profile .logout { display: block; }
+  .profile .logout:hover { color: #ef4444; }
+  .main {
+    margin-left: 72px;
+    flex: 1;
+    display: flex; flex-direction: column;
+  }
+  .topbar {
+    height: 64px;
+    background: #fff;
+    border-bottom: 1px solid #eef0f4;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem;
+  }
+  .topbar h2 { font-size: 1.05rem; font-weight: 700; }
+  .topbar .actions { display: flex; align-items: center; gap: 1rem; }
+  .topbar .actions button {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    border: none; background: #f5f5f7;
+    color: #666;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .topbar .actions button:hover { background: #eee; color: #333; }
+  .content { flex: 1; padding: 2rem; }
+  .placeholder {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #eef0f4;
+    padding: 2rem;
+    text-align: center;
+    color: #ccc;
+    font-size: 0.9rem;
+  }
+</style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">AL<span class="logo-text">uxe</span></div>
+    <nav class="nav">
+      <a href="#" class="active"><i class="pi pi-th-large"></i><span>Dashboard</span></a>
+      <a href="#"><i class="pi pi-calendar"></i><span>Calendario</span></a>
+      <a href="#"><i class="pi pi-users"></i><span>Especialistas</span></a>
+      <a href="#"><i class="pi pi-percentage"></i><span>Promociones</span></a>
+      <a href="#"><i class="pi pi-star"></i><span>Valoraciones</span></a>
+      <a href="#"><i class="pi pi-clock"></i><span>Horarios</span></a>
+      <a href="#"><i class="pi pi-chart-bar"></i><span>Analytics</span></a>
+    </nav>
+    <div class="profile">
+      <div class="avatar">A</div>
+      <div class="info">
+        <p>Admin</p>
+        <span>Administrador</span>
+      </div>
+      <button class="logout"><i class="pi pi-sign-out"></i></button>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <h2>Dashboard</h2>
+      <div class="actions">
+        <button><i class="pi pi-moon"></i></button>
+        <button><i class="pi pi-home"></i></button>
+      </div>
+    </header>
+    <div class="content">
+      <div class="placeholder">Contenido principal</div>
+    </div>
+  </div>
+</body>
+</html>
