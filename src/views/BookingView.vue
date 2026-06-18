@@ -273,13 +273,12 @@ function goStep(index: number) {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  height: calc(100dvh - 120px);
+  height: calc(100dvh - 180px);
+  overflow-y: auto;
 }
 
 .step-area {
   flex: 1;
-  min-height: 0;
-  overflow-y: auto;
   padding: 40px 48px;
 }
 
@@ -290,7 +289,9 @@ function goStep(index: number) {
   padding: 20px 48px;
   border-top: 1px solid color-mix(in srgb, var(--color-outline-variant) 30%, transparent);
   background: var(--color-surface);
-  flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
 }
 
 .nav-buttons:empty {
@@ -357,11 +358,11 @@ function goStep(index: number) {
 
   .right-content {
     height: auto;
+    overflow: visible;
   }
 
   .step-area {
     flex: none;
-    overflow: visible;
   }
 
   .nav-buttons {
