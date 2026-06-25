@@ -37,6 +37,14 @@
 | `tailwindcss` | ^4.3.1 | Framework CSS utility-first |
 | `autoprefixer` | ^10.5.0 | Prefijos CSS |
 | `postcss` | ^8.5.15 | Procesador CSS |
+| `supabase` (CLI) | ^2.107.0 | Edge Functions, deploy, webhooks |
+
+### Servicios externos
+
+| Servicio | Propósito |
+|---|---|
+| **Supabase** | Base de datos, autenticación, Edge Functions |
+| **Resend** | Emails transaccionales (confirmación, recordatorios, etc.) |
 
 ---
 
@@ -47,6 +55,17 @@ SalonBelleza/
 ├── index.html                  # Entry point HTML
 ├── vite.config.js              # Configuración de Vite
 ├── package.json                # Dependencias y scripts
+├── scripts/
+│   └── deploy-emails.sh        # Deploy automatizado de Edge Functions
+├── supabase/
+│   ├── config.toml             # Configuración Supabase CLI
+│   ├── .env                    # Variables locales para Edge Functions
+│   └── functions/
+│       ├── booking-confirmation/
+│       ├── appointment-status-change/
+│       ├── feedback-thankyou/
+│       ├── welcome-email/
+│       └── send-reminders/
 ├── public/
 │   ├── favicon.svg             # Favicon de la marca
 │   └── icons.svg               # Sprite de iconos (legacy)
@@ -54,6 +73,9 @@ SalonBelleza/
     ├── main.js                 # Punto de entrada de la app
     ├── App.vue                 # Componente raíz
     ├── style.css               # Estilos globales + tema personalizado
+    ├── lib/
+    │   ├── supabase.ts         # Cliente Supabase
+    │   └── email.ts            # Wrapper para invocar Edge Functions de email
     ├── assets/                 # Recursos estáticos
     ├── components/
     │   ├── atoms/              # Componentes atómicos (AppButton, AppInput, etc.)
@@ -163,21 +185,22 @@ SalonBelleza/
 | Notificaciones toast | ✅ Completo |
 | Sidebar de navegación admin | ✅ Completo |
 | Menú móvil con animaciones | ✅ Completo |
+| Emails transaccionales (Resend + Edge Functions) | ✅ Completo |
 
 ### Funcionalidades Simuladas (sin backend real)
 
 | Funcionalidad | Comportamiento actual |
-|---|---|
-| Autenticación | Simulada, redirecciona según rol (admin vs cliente) |
-| Registro | Simulado, redirecciona a `/booking` |
-| Persistencia de datos | Arreglos en memoria, sin base de datos |
-| Reserva de citas | Simulada con toast y redirección |
-| CRUD de especialistas | Opera sobre arrays reactivos en memoria |
-| CRUD de promociones | Opera sobre arrays reactivos en memoria |
+|---|---|---|
+| Autenticación | Supabase Auth (real) |
+| Registro | Supabase Auth con trigger `handle_new_user` |
+| Persistencia de datos | Supabase PostgreSQL + RLS |
+| Reserva de citas | INSERT en `appointments` via Supabase API |
+| CRUD de especialistas | CRUD via `specialists` table |
+| CRUD de promociones | CRUD via `promotions` table |
+| Emails transaccionales | Resend via Supabase Edge Functions |
 | AI Analytics | Texto narrativo hardcodeado |
 | Imágenes | Usan URLs externas |
 | Pagos | No implementado |
-| Roles y permisos | No implementado |
 
 ---
 
@@ -294,16 +317,16 @@ SalonBelleza/
 
 ## 12. Estado Actual del Proyecto
 
-**Aura Luxe Salon** es un MVP funcional de frontend para la gestión de un salón de belleza de lujo. Está construido profesionalmente con:
+**Aura Luxe Salon** es un MVP funcional para la gestión de un salón de belleza de lujo. Está construido profesionalmente con:
 
 - Arquitectura atómica de componentes
 - Lazy loading de rutas
 - Sistema de diseño consistente
 - Diseño responsive
 - Separación clara entre layouts público y administrativo
-
-Es un excelente punto de partida para conectar con un backend real (API REST) e implementar funcionalidades como autenticación JWT, base de datos persistente, pasarela de pagos, notificaciones y un motor real de AI analytics.
+- Backend real con Supabase (auth, DB, RLS, Edge Functions)
+- Emails transaccionales con Resend integrados via Edge Functions
 
 ---
 
-*Documento generado el 16 de junio de 2026*
+*Documento generado el 16 de junio de 2026 — Actualizado el 24 de junio de 2026*

@@ -11,7 +11,8 @@ Sistema de gestión para salón de belleza construido con **Vue 3 + Vite + Prime
 | PrimeVue     | ^4.5.5   | Componentes UI              |
 | Tailwind CSS | ^4.3.1   | Estilos utility-first       |
 | Vue Router   | ^4.6.4   | Enrutamiento SPA            |
-| Supabase     | ^2.108.2 | Backend (auth, DB, storage) |
+| Supabase     | ^2.108.2 | Backend (auth, DB, storage, Edge Functions) |
+| Resend       | —        | Emails transaccionales (via Supabase Edge Functions) |
 
 ## Funcionalidades
 
@@ -22,6 +23,7 @@ Sistema de gestión para salón de belleza construido con **Vue 3 + Vite + Prime
 - **Panel administrador** con dashboard, CRUD de especialistas/promociones, calendario, horarios, analíticas y moderación de feedback
 - **Autenticación** con Supabase Auth (login/registro), roles `client` y `admin`
 - **Control de acceso** por ruta via navigation guard
+- **Emails transaccionales** con Resend (confirmación de cita, cambios de estado, feedback, bienvenida, recordatorios)
 
 ## Vistas
 
@@ -57,6 +59,9 @@ npm run build
 
 # Previsualizar build
 npm run preview
+
+# Desplegar Edge Functions de emails
+npm run deploy:emails
 ```
 
 ## Variables de Entorno
@@ -75,6 +80,17 @@ SalonBelleza/
 ├── index.html
 ├── vite.config.js
 ├── package.json
+├── scripts/
+│   └── deploy-emails.sh        # Deploy automatizado de Edge Functions
+├── supabase/
+│   ├── config.toml              # Configuración Supabase CLI
+│   ├── .env                     # Variables locales para Edge Functions
+│   └── functions/
+│       ├── booking-confirmation/
+│       ├── appointment-status-change/
+│       ├── feedback-thankyou/
+│       ├── welcome-email/
+│       └── send-reminders/
 ├── public/
 │   ├── favicon.svg
 │   └── icons.svg
@@ -110,6 +126,7 @@ SalonBelleza/
 
 - [`ANALISIS_PROYECTO.md`](./ANALISIS_PROYECTO.md) — Análisis inicial del proyecto
 - [`GUIA_SUPABASE.md`](./GUIA_SUPABASE.md) — Guía completa de integración, SQL y RLS
+- [`GUIA_RESEND.md`](./GUIA_RESEND.md) — Guía de integración de Resend (Edge Functions, webhooks)
 - [`AVANCE.md`](./AVANCE.md) — Progreso del proyecto y pendientes
 
 ## Notas

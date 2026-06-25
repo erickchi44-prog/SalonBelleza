@@ -13,8 +13,8 @@
         </div>
       </div>
 
-      <div class="text-[0.6rem] font-bold uppercase tracking-[0.12em] px-md pt-sm pb-xs" style="color:rgba(255,255,255,0.2)">General</div>
-      <nav class="flex-grow overflow-y-auto px-sm">
+      <div class="flex-grow overflow-y-auto px-sm">
+        <div class="text-[0.6rem] font-bold uppercase tracking-[0.12em] pt-sm pb-xs" style="color:rgba(255,255,255,0.2)">General</div>
         <router-link
           v-for="item in mainItems"
           :key="item.path"
@@ -27,10 +27,8 @@
           <span class="flex-1">{{ item.label }}</span>
           <span v-if="item.badge" class="text-[0.6rem] font-bold px-sm py-0.5 rounded-full" style="background:rgba(220,38,38,0.15);color:#fca5a5">{{ item.badge }}</span>
         </router-link>
-      </nav>
 
-      <div class="text-[0.6rem] font-bold uppercase tracking-[0.12em] px-md pt-sm pb-xs" style="color:rgba(255,255,255,0.2)">Gestión</div>
-      <nav class="overflow-y-auto px-sm">
+        <div class="text-[0.6rem] font-bold uppercase tracking-[0.12em] pt-sm pb-xs" style="color:rgba(255,255,255,0.2)">Gestión</div>
         <router-link
           v-for="item in managementItems"
           :key="item.path"
@@ -43,10 +41,8 @@
           <span class="flex-1">{{ item.label }}</span>
           <span v-if="item.badge" class="text-[0.6rem] font-bold px-sm py-0.5 rounded-full" style="background:rgba(220,38,38,0.15);color:#fca5a5">{{ item.badge }}</span>
         </router-link>
-      </nav>
 
-      <div class="text-[0.6rem] font-bold uppercase tracking-[0.12em] px-md pt-sm pb-xs" style="color:rgba(255,255,255,0.2)">Inteligencia</div>
-      <nav class="overflow-y-auto px-sm">
+        <div class="text-[0.6rem] font-bold uppercase tracking-[0.12em] pt-sm pb-xs" style="color:rgba(255,255,255,0.2)">Inteligencia</div>
         <router-link
           v-for="item in intelligenceItems"
           :key="item.path"
@@ -58,7 +54,7 @@
           <i :class="item.icon" class="text-sm min-w-[20px] text-center"></i>
           <span class="flex-1">{{ item.label }}</span>
         </router-link>
-      </nav>
+      </div>
 
       <div class="flex items-center gap-sm px-md py-md mt-auto" style="border-top:1px solid rgba(255,255,255,0.06)">
         <div class="w-9 h-9 rounded-xl flex items-center justify-center font-headline-md text-sm font-bold shrink-0" style="background:linear-gradient(135deg, #eebd8e, #79542e);color:#2c1600">

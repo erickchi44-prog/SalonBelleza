@@ -8,6 +8,8 @@
 | Guía Supabase | ✅ Completo | 2026-06-16 |
 | Migración a Supabase | ✅ Completo | 2026-06-16 |
 | Build de producción | ✅ Exitoso | 2026-06-16 |
+| Guía Resend | ✅ Completo | 2026-06-24 |
+| Edge Functions (Resend) | ✅ Creadas | 2026-06-24 |
 
 ---
 
@@ -57,6 +59,42 @@
 
 ---
 
+## Integración con Resend (Emails Transaccionales)
+
+### Edge Functions Creadas
+
+| Función | Disparo | Propósito |
+|---|---|---|
+| `booking-confirmation` | Webhook `appointments.INSERT` o llamada directa | Confirmación de cita al cliente |
+| `appointment-status-change` | Webhook `appointments.UPDATE` | Notificación de cambio de estado |
+| `feedback-thankyou` | Webhook `feedback.INSERT` o llamada directa | Agradecimiento por feedback |
+| `welcome-email` | Webhook `profiles.INSERT` | Email de bienvenida al registrarse |
+| `send-reminders` | Cron externo (cron-job.org o GitHub Actions) | Recordatorio 24h antes de la cita |
+
+### Archivos Creados
+
+- `supabase/config.toml` — Configuración de Supabase CLI
+- `supabase/.env` — Variables locales para Edge Functions
+- `supabase/functions/*/index.ts` — 5 Edge Functions implementadas
+- `src/lib/email.ts` — Wrapper para invocar funciones desde el frontend
+- `GUIA_RESEND.md` — Guía completa de integración
+
+### Scripts de Deploy
+
+| Script | Comando | Propósito |
+|---|---|---|
+| `deploy:emails` | `npm run deploy:emails` | Script interactivo que linkea, setea secrets y despliega las 5 funciones |
+| `deploy:functions` | `npm run deploy:functions <name>` | Despliega una función individual |
+
+### Pendiente
+
+- [ ] Ejecutar `supabase login` desde terminal
+- [ ] Ejecutar `npm run deploy:emails` para desplegar
+- [ ] Configurar webhooks en Supabase Dashboard
+- [ ] Configurar cron para recordatorios
+
+---
+
 ## Pruebas Realizadas
 
 | Prueba | Resultado | Notas |
@@ -94,6 +132,8 @@
 - [ ] Implementar carga de imágenes para servicios/especialistas (usar Supabase Storage)
 - [ ] Agregar pruebas unitarias con Vitest
 - [ ] Configurar CI/CD con GitHub Actions
+- [ ] Configurar webhooks en Supabase Dashboard para Edge Functions
+- [ ] Desplegar Edge Functions a producción
 
 ---
 
@@ -101,6 +141,7 @@
 
 - **`ANALISIS_PROYECTO.md`** — Análisis inicial del proyecto
 - **`GUIA_SUPABASE.md`** — Guía completa de integración (SQL, RLS, endpoints)
+- **`GUIA_RESEND.md`** — Guía de integración de Resend (Edge Functions, webhooks)
 - **`AVANCE.md`** — Este archivo, progreso y pendientes
 
 ## Notas Técnicas

@@ -92,7 +92,33 @@
             Ver todas <i class="pi pi-arrow-right text-label-sm"></i>
           </router-link>
         </div>
-        <div class="overflow-x-auto">
+
+        <!-- Mobile cards -->
+        <div class="sm:hidden space-y-sm">
+          <div v-for="(row, i) in recentBookings" :key="i"
+            class="border border-outline-variant/20 rounded-lg p-sm space-y-xs">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-sm text-on-surface">{{ row.customer }}</span>
+              <span
+                class="px-sm py-0.5 text-label-sm font-label-sm uppercase tracking-wider font-semibold rounded-full text-xs"
+                :class="{
+                  'bg-success-container/30 text-success': row.status === 'Confirmada',
+                  'bg-warning-container/30 text-warning': row.status === 'Pendiente',
+                  'bg-danger-container/30 text-danger': row.status === 'Cancelada'
+                }"
+              >{{ row.status }}</span>
+            </div>
+            <div class="text-xs text-on-surface-variant/80">{{ row.services.join(', ') }}</div>
+            <div class="flex items-center gap-md text-xs text-on-surface-variant/60">
+              <span><i class="pi pi-user text-label-sm mr-xs"></i>{{ row.specialist }}</span>
+              <span><i class="pi pi-clock text-label-sm mr-xs"></i>{{ row.time }}</span>
+            </div>
+          </div>
+          <div v-if="recentBookings.length === 0" class="text-center py-lg text-on-surface-variant/40 text-sm">No hay citas recientes</div>
+        </div>
+
+        <!-- Desktop table -->
+        <div class="hidden sm:block overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
               <tr class="border-b border-outline-variant/20">
