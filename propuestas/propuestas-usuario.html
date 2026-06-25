@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5 Propuestas — Nombre de Usuario</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Hanken Grotesk', sans-serif;
+      background: #faf9f6;
+      color: #1c140d;
+      padding: 2rem;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: #79542e;
+      margin-bottom: 0.25rem;
+    }
+    .subtitle {
+      color: #6b5e50;
+      margin-bottom: 2rem;
+      font-weight: 400;
+    }
+    .grid {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #fff;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(121,84,46,0.08);
+    }
+    .card-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #f0ede8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: #79542e;
+    }
+    .badge {
+      font-size: 0.7rem;
+      background: #eebd8e;
+      color: #2c1600;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .preview {
+      padding: 2rem 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ─── Recreación del header Aura Luxe ─── */
+    .aura-header {
+      width: 100%;
+      max-width: 720px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.05);
+      border-radius: 0.75rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .aura-header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 56px;
+      padding: 0 1.25rem;
+    }
+    .aura-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: #79542e;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .aura-logo .icon-box {
+      width: 28px; height: 28px;
+      background: #79542e;
+      border-radius: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .aura-logo .icon-box span {
+      color: #faf9f6;
+      font-size: 14px;
+    }
+    .aura-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .aura-nav a, .aura-nav button {
+      font-size: 0.8rem;
+      color: #6b5e50;
+      text-decoration: none;
+      padding: 0.4rem 0.7rem;
+      border-radius: 0.375rem;
+      transition: all 0.15s;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .aura-nav a:hover, .aura-nav button:hover {
+      background: rgba(121,84,46,0.08);
+      color: #79542e;
+    }
+    .aura-nav .icon-btn {
+      min-width: 36px; min-height: 36px;
+      justify-content: center;
+      padding: 0;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+    }
+
+    /* ─── Propuesta 1: Avatar + nombre en la barra ─── */
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.2rem 0.6rem 0.2rem 0.3rem;
+      border-radius: 999px;
+      background: rgba(121,84,46,0.06);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .user-chip:hover {
+      background: rgba(121,84,46,0.12);
+    }
+    .user-chip .avatar {
+      width: 28px; height: 28px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #eebd8e, #79542e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #2c1600;
+    }
+    .user-chip .name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #2c1600;
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ─── Propuesta 2: Dropdown al hacer clic ─── */
+    .user-dropdown-wrap {
+      position: relative;
+    }
+    .user-dropdown-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.2rem 0.6rem 0.2rem 0.3rem;
+      border-radius: 999px;
+      background: rgba(121,84,46,0.06);
+      cursor: pointer;
+      transition: background 0.15s;
+      border: none;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    .user-dropdown-btn:hover {
+      background: rgba(121,84,46,0.12);
+    }
+    .user-dropdown-btn .avatar {
+      width: 28px; height: 28px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #eebd8e, #79542e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #2c1600;
+    }
+    .user-dropdown-btn .name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #2c1600;
+    }
+    .user-dropdown-btn .arrow {
+      font-size: 14px;
+      color: #6b5e50;
+      transition: transform 0.2s;
+    }
+    .dropdown-open .arrow {
+      transform: rotate(180deg);
+    }
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: #fff;
+      border-radius: 0.75rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      border: 1px solid rgba(0,0,0,0.04);
+      min-width: 200px;
+      padding: 0.4rem;
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.2s;
+    }
+    .dropdown-menu.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-6px);
+    }
+    .dropdown-menu .menu-header {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid #f0ede8;
+      margin-bottom: 0.25rem;
+    }
+    .dropdown-menu .menu-header .full-name {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #1c140d;
+    }
+    .dropdown-menu .menu-header .email {
+      font-size: 0.75rem;
+      color: #8a7a6a;
+    }
+    .dropdown-menu a, .dropdown-menu button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      color: #2c1600;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background 0.1s;
+      width: 100%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    .dropdown-menu a:hover, .dropdown-menu button:hover {
+      background: rgba(121,84,46,0.06);
+    }
+    .dropdown-menu .danger {
+      color: #dc2626;
+    }
+    .dropdown-menu .divider {
+      height: 1px;
+      background: #f0ede8;
+      margin: 0.25rem 0.5rem;
+    }
+
+    /* ─── Propuesta 3: Welcome bar superior ─── */
+    .welcome-bar {
+      width: 100%;
+      max-width: 720px;
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+    .welcome-bar-inner {
+      background: linear-gradient(135deg, #79542e, #9a6e3e);
+      padding: 0.5rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .welcome-bar-inner p {
+      color: rgba(255,255,255,0.9);
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .welcome-bar-inner p strong {
+      color: #fff;
+      font-weight: 600;
+    }
+    .welcome-bar-inner a {
+      color: #eebd8e;
+      font-size: 0.75rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: opacity 0.15s;
+    }
+    .welcome-bar-inner a:hover {
+      opacity: 0.8;
+    }
+
+    /* ─── Propuesta 4: Avatar grande en menú móvil ─── */
+    .mobile-menu-sim {
+      width: 280px;
+      background: #fff;
+      border-radius: 0.75rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      border: 1px solid rgba(0,0,0,0.04);
+      overflow: hidden;
+    }
+    .mobile-user-section {
+      padding: 1.25rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid #f0ede8;
+    }
+    .mobile-user-section .big-avatar {
+      width: 44px; height: 44px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #eebd8e, #79542e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #2c1600;
+    }
+    .mobile-user-section .info {
+      flex: 1;
+      min-width: 0;
+    }
+    .mobile-user-section .info .name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #1c140d;
+    }
+    .mobile-user-section .info .role {
+      font-size: 0.75rem;
+      color: #8a7a6a;
+    }
+    .mobile-menu-links {
+      padding: 0.5rem;
+    }
+    .mobile-menu-links a, .mobile-menu-links button {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      color: #2c1600;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background 0.1s;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    .mobile-menu-links a:hover, .mobile-menu-links button:hover {
+      background: rgba(121,84,46,0.06);
+    }
+
+    /* ─── Propuesta 5: Badge flotante con inicial ─── */
+    .header-with-badge {
+      position: relative;
+    }
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+    }
+    .user-badge .mini-avatar {
+      width: 32px; height: 32px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #eebd8e, #79542e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #2c1600;
+      box-shadow: 0 2px 6px rgba(121,84,46,0.25);
+      transition: box-shadow 0.2s;
+    }
+    .user-badge:hover .mini-avatar {
+      box-shadow: 0 3px 10px rgba(121,84,46,0.35);
+    }
+    .user-badge .greeting {
+      display: none;
+    }
+    .user-badge:hover .greeting {
+      display: inline;
+    }
+    .user-badge .greeting-text {
+      font-size: 0.75rem;
+      color: #6b5e50;
+    }
+    .user-badge .greeting-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #2c1600;
+    }
+
+    /* ─── Info extra ─── */
+    .pros-cons {
+      padding: 0 1.5rem 1.25rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      font-size: 0.78rem;
+    }
+    .pros-cons div {
+      padding: 0.6rem 0.85rem;
+      border-radius: 0.5rem;
+    }
+    .pros-cons .pros {
+      background: rgba(22,163,74,0.06);
+      border-left: 3px solid #16a34a;
+    }
+    .pros-cons .cons {
+      background: rgba(220,38,38,0.06);
+      border-left: 3px solid #dc2626;
+    }
+    .pros-cons strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .pros-cons ul {
+      list-style: none;
+      padding: 0;
+    }
+    .pros-cons li {
+      margin-bottom: 0.15rem;
+      color: #4a3f35;
+    }
+
+    .view-code {
+      padding: 0 1.5rem 1.25rem;
+    }
+    .view-code details {
+      font-size: 0.78rem;
+    }
+    .view-code summary {
+      cursor: pointer;
+      color: #79542e;
+      font-weight: 600;
+    }
+    .view-code pre {
+      background: #f5f3f0;
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      overflow-x: auto;
+      font-size: 0.72rem;
+      line-height: 1.5;
+      color: #2c1600;
+    }
+  </style>
+</head>
+<body>
+  <h1>¿Dónde mostrar el nombre del usuario?</h1>
+  <p class="subtitle">5 propuestas visuales para integrar el nombre en la interfaz de Aura Luxe Salon</p>
+
+  <div class="grid">
+
+    <!-- ═══════════ PROPUESTA 1 ═══════════ -->
+    <div class="card">
+      <div class="card-header">
+        <h2>1. Chip de usuario en la barra de navegación</h2>
+        <span class="badge">Header — Desktop</span>
+      </div>
+      <div class="preview">
+        <div class="aura-header">
+          <div class="aura-header-inner">
+            <a class="aura-logo" href="#">
+              <span class="icon-box"><span class="material-symbols-outlined" style="font-size:14px">sparkles</span></span>
+              Aura Luxe
+            </a>
+            <nav class="aura-nav">
+              <a href="#">Servicios</a>
+              <a href="#">Reservar</a>
+              <a href="#">Valoraciones</a>
+              <button class="icon-btn"><span class="material-symbols-outlined">dark_mode</span></button>
+              <a href="#">Mis Citas</a>
+              <div class="user-chip">
+                <div class="avatar">M</div>
+                <span class="name">María López</span>
+              </div>
+              <button class="icon-btn"><span class="material-symbols-outlined">logout</span></button>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <strong>✅ Pros</strong>
+          <ul>
+            <li>Ocupa poco espacio horizontal</li>
+            <li>Muestra nombre + avatar siempre visibles</li>
+            <li>Sigue el patrón de PrimeVue / Material</li>
+            <li>Fácil implementación (un chip)</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <strong>⚠️ Contras</strong>
+          <ul>
+            <li>No funciona bien con nombres muy largos</li>
+            <li>Sin dropdown, no hay acceso rápido a perfil</li>
+            <li>Puede verse apretado en tablets</li>
+          </ul>
+        </div>
+      </div>
+      <div class="view-code">
+        <details>
+          <summary>Ver código</summary>
+          <pre>&lt;div class="user-chip"&gt;
+  &lt;div class="avatar"&gt;M&lt;/div&gt;
+  &lt;span class="name"&gt;María López&lt;/span&gt;
+&lt;/div&gt;</pre>
+        </details>
+      </div>
+    </div>
+
+    <!-- ═══════════ PROPUESTA 2 ═══════════ -->
+    <div class="card">
+      <div class="card-header">
+        <h2>2. Dropdown de usuario al hacer clic</h2>
+        <span class="badge">Header — Desktop</span>
+      </div>
+      <div class="preview">
+        <div class="aura-header">
+          <div class="aura-header-inner">
+            <a class="aura-logo" href="#">
+              <span class="icon-box"><span class="material-symbols-outlined" style="font-size:14px">sparkles</span></span>
+              Aura Luxe
+            </a>
+            <nav class="aura-nav">
+              <a href="#">Servicios</a>
+              <a href="#">Reservar</a>
+              <a href="#">Valoraciones</a>
+              <button class="icon-btn"><span class="material-symbols-outlined">dark_mode</span></button>
+              <a href="#">Mis Citas</a>
+              <div class="user-dropdown-wrap dropdown-open">
+                <button class="user-dropdown-btn">
+                  <div class="avatar">M</div>
+                  <span class="name">María</span>
+                  <span class="arrow material-symbols-outlined">expand_more</span>
+                </button>
+                <div class="dropdown-menu">
+                  <div class="menu-header">
+                    <div class="full-name">María López</div>
+                    <div class="email">maria@email.com</div>
+                  </div>
+                  <a href="#"><span class="material-symbols-outlined">person</span> Mi Perfil</a>
+                  <a href="#"><span class="material-symbols-outlined">settings</span> Configuración</a>
+                  <div class="divider"></div>
+                  <button class="danger"><span class="material-symbols-outlined">logout</span> Cerrar Sesión</button>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <strong>✅ Pros</strong>
+          <ul>
+            <li>Más limpio (nombre corto + chevron)</li>
+            <li>Dropdown permite acceso a perfil, config, etc.</li>
+            <li>Patrón familiar (Gmail, GitHub, etc.)</li>
+            <li>Funciona bien en desktop y tablet</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <strong>⚠️ Contras</strong>
+          <ul>
+            <li>Requiere un click extra para ver el nombre completo</li>
+            <li>Más lógica (toggle + clics fuera)</li>
+            <li>En móvil necesita adaptación</li>
+          </ul>
+        </div>
+      </div>
+      <div class="view-code">
+        <details>
+          <summary>Ver código</summary>
+          <pre>&lt;div class="user-dropdown-wrap"&gt;
+  &lt;button class="user-dropdown-btn" @click="open = !open"&gt;
+    &lt;div class="avatar"&gt;M&lt;/div&gt;
+    &lt;span class="name"&gt;María&lt;/span&gt;
+    &lt;span class="arrow"&gt;expand_more&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div v-if="open" class="dropdown-menu"&gt;
+    &lt;div class="menu-header"&gt;
+      &lt;div class="full-name"&gt;María López&lt;/div&gt;
+      &lt;div class="email"&gt;maria@email.com&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;a href="#"&gt;Mi Perfil&lt;/a&gt;
+    &lt;hr /&gt;
+    &lt;button @click="logout"&gt;Cerrar Sesión&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+        </details>
+      </div>
+    </div>
+
+    <!-- ═══════════ PROPUESTA 3 ═══════════ -->
+    <div class="card">
+      <div class="card-header">
+        <h2>3. Barra de bienvenida superior</h2>
+        <span class="badge">Sobre el header</span>
+      </div>
+      <div class="preview" style="flex-direction:column;align-items:center;gap:0.5rem">
+        <div class="welcome-bar">
+          <div class="welcome-bar-inner">
+            <p>✨ Bienvenida, <strong>María López</strong></p>
+            <a href="#">Mi Cuenta <span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle">arrow_forward</span></a>
+          </div>
+        </div>
+        <div class="aura-header">
+          <div class="aura-header-inner">
+            <a class="aura-logo" href="#">
+              <span class="icon-box"><span class="material-symbols-outlined" style="font-size:14px">sparkles</span></span>
+              Aura Luxe
+            </a>
+            <nav class="aura-nav">
+              <a href="#">Servicios</a>
+              <a href="#">Reservar</a>
+              <a href="#">Valoraciones</a>
+              <button class="icon-btn"><span class="material-symbols-outlined">dark_mode</span></button>
+              <a href="#">Mis Citas</a>
+              <button class="icon-btn"><span class="material-symbols-outlined">logout</span></button>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <strong>✅ Pros</strong>
+          <ul>
+            <li>Muy visible y acogedor</li>
+            <li>No interfiere con la navegación existente</li>
+            <li>Refuerza la marca (experiencia personalizada)</li>
+            <li>Fácil de implementar como slot</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <strong>⚠️ Contras</strong>
+          <ul>
+            <li>Roba espacio vertical (≈40px)</li>
+            <li>Se siente redundante en páginas internas</li>
+            <li>En móvil comprime aún más la vista</li>
+            <li>No es un patrón común en SPA</li>
+          </ul>
+        </div>
+      </div>
+      <div class="view-code">
+        <details>
+          <summary>Ver código</summary>
+          <pre>&lt;div class="welcome-bar"&gt;
+  &lt;div style="background:linear-gradient(135deg,#79542e,#9a6e3e);
+              padding:0.5rem 1.25rem;
+              display:flex;align-items:center;
+              justify-content:space-between"&gt;
+    &lt;p&gt;✨ Bienvenida, &lt;strong&gt;María López&lt;/strong&gt;&lt;/p&gt;
+    &lt;a href="/profile" style="color:#eebd8e;font-size:0.75rem"&gt;
+      Mi Cuenta →
+    &lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+        </details>
+      </div>
+    </div>
+
+    <!-- ═══════════ PROPUESTA 4 ═══════════ -->
+    <div class="card">
+      <div class="card-header">
+        <h2>4. Sección de usuario en el menú móvil</h2>
+        <span class="badge">Menú móvil</span>
+      </div>
+      <div class="preview">
+        <div class="mobile-menu-sim">
+          <div class="mobile-user-section">
+            <div class="big-avatar">M</div>
+            <div class="info">
+              <div class="name">María López</div>
+              <div class="role">Cliente</div>
+            </div>
+            <button style="background:transparent;border:none;cursor:pointer;color:#8a7a6a">
+              <span class="material-symbols-outlined">logout</span>
+            </button>
+          </div>
+          <div class="mobile-menu-links">
+            <a href="#"><span class="material-symbols-outlined">content_cut</span> Servicios</a>
+            <a href="#"><span class="material-symbols-outlined">calendar_month</span> Reservar</a>
+            <a href="#"><span class="material-symbols-outlined">star</span> Valoraciones</a>
+            <a href="#"><span class="material-symbols-outlined">calendar_today</span> Mis Citas</a>
+            <a href="#"><span class="material-symbols-outlined">person</span> Mi Perfil</a>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <strong>✅ Pros</strong>
+          <ul>
+            <li>Ideal para móvil (espacio dedicado)</li>
+            <li>Avatar grande + nombre completo + rol</li>
+            <li>Remplaza la sección inferior actual del menú</li>
+            <li>Experiencia similar a apps nativas</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <strong>⚠️ Contras</strong>
+          <ul>
+            <li>Solo visible al abrir el menú hamburguesa</li>
+            <li>No resuelve la visibilidad en desktop</li>
+            <li>Requiere scroll si hay muchos ítems</li>
+          </ul>
+        </div>
+      </div>
+      <div class="view-code">
+        <details>
+          <summary>Ver código</summary>
+          <pre>&lt;div class="mobile-user-section"&gt;
+  &lt;div class="big-avatar"&gt;M&lt;/div&gt;
+  &lt;div class="info"&gt;
+    &lt;div class="name"&gt;María López&lt;/div&gt;
+    &lt;div class="role"&gt;Cliente&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button @click="logout"&gt;
+    &lt;span class="material-symbols-outlined"&gt;logout&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;</pre>
+        </details>
+      </div>
+    </div>
+
+    <!-- ═══════════ PROPUESTA 5 ═══════════ -->
+    <div class="card">
+      <div class="card-header">
+        <h2>5. Badge flotante con hover reveal</h2>
+        <span class="badge">Header — Desktop</span>
+      </div>
+      <div class="preview">
+        <div class="aura-header header-with-badge">
+          <div class="aura-header-inner">
+            <a class="aura-logo" href="#">
+              <span class="icon-box"><span class="material-symbols-outlined" style="font-size:14px">sparkles</span></span>
+              Aura Luxe
+            </a>
+            <nav class="aura-nav" style="gap:0.5rem">
+              <a href="#">Servicios</a>
+              <a href="#">Reservar</a>
+              <a href="#">Valoraciones</a>
+              <button class="icon-btn"><span class="material-symbols-outlined">dark_mode</span></button>
+              <a href="#">Mis Citas</a>
+              <div class="user-badge">
+                <div class="mini-avatar">M</div>
+                <div class="greeting" style="display:flex;flex-direction:column;line-height:1.2">
+                  <span class="greeting-text">Hola,</span>
+                  <span class="greeting-name">María</span>
+                </div>
+              </div>
+              <button class="icon-btn"><span class="material-symbols-outlined">logout</span></button>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <strong>✅ Pros</strong>
+          <ul>
+            <li>Mínimo impacto visual (solo avatar)</li>
+            <li>Nombre aparece al hacer hover (delight)</li>
+            <li>Ocupa el mínimo espacio</li>
+            <li>Se siente moderno y elegante</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <strong>⚠️ Contras</strong>
+          <ul>
+            <li>No funciona bien en táctil (hover)</li>
+            <li>Requiere touch adapters en móvil</li>
+            <li>El nombre no está siempre visible</li>
+          </ul>
+        </div>
+      </div>
+      <div class="view-code">
+        <details>
+          <summary>Ver código</summary>
+          <pre>&lt;div class="user-badge"&gt;
+  &lt;div class="mini-avatar"&gt;M&lt;/div&gt;
+  &lt;div class="greeting"&gt;
+    &lt;span class="greeting-text"&gt;Hola,&lt;/span&gt;
+    &lt;span class="greeting-name"&gt;María&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;style scoped&gt;
+.user-badge .greeting {
+  display: none;
+}
+.user-badge:hover .greeting {
+  display: flex;
+}
+&lt;/style&gt;</pre>
+        </details>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
